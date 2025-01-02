@@ -1,0 +1,19 @@
+name: hitrace
+version: 0.1.0
+
+authors:
+  - Stefan Bilharz <stefan@sbsoftware.de>
+
+targets:
+  hitrace:
+    main: src/hitrace.cr
+
+crystal: '>= 1.14.0'
+
+license: MIT
+
+dependencies:
+  crumble-turbo:
+    github: sbsoftware/crumble-turbo
+  sqlite3:
+    github: crystal-lang/crystal-sqlite3
