@@ -1,14 +1,40 @@
 module Orma
   class Record
-    macro model_action(name, refreshed_model_template, &blk)
-      stimulus_controller {{name.id.stringify.camelcase.id}}Controller do
-        targets :submit
+    stimulus_controller GenericModelActionController do
+      targets :submit
 
-        action :submit do
-          this.submitTarget.click._call
+      action :submit do
+        this.submitTarget.click._call
+      end
+    end
+
+    class GenericModelActionTemplate
+      getter action_path : String
+
+      def initialize(@action_path); end
+
+      css_class Inner
+
+      style do
+        rule Inner do
+          width 100.percent
+          height 100.percent
         end
       end
 
+      ToHtml.instance_template do
+        div GenericModelActionController do
+          form style: "display: none;", action: action_path, method: "POST" do
+            input GenericModelActionController.submit_target, type: :submit
+          end
+          div Inner, GenericModelActionController.submit_action("click") do
+            yield
+          end
+        end
+      end
+    end
+
+    macro model_action(name, refreshed_model_template, &blk)
       class {{name.id.stringify.camelcase.id}}Action < Orma::ModelAction
         @model : {{@type}}?
 
@@ -28,34 +54,11 @@ module Orma
           model.{{refreshed_model_template}}
         end
 
-        class Template
-          getter parent : {{@type}}
-
-          forward_missing_to parent
-
-          def initialize(@parent); end
-
-          def stimulus_controller
-            {{name.id.stringify.camelcase.id}}Controller
-          end
-
-          ToHtml.instance_template do
-            div stimulus_controller do
-              form style: "display: none;", action: {{name.id.stringify.camelcase.id}}Action.uri_path(id), method: "POST" do
-                input stimulus_controller.submit_target, type: :submit
-              end
-              div stimulus_controller.submit_action("click") do
-                yield
-              end
-            end
-          end
-        end
-
         {{blk.body}}
       end
 
       def {{name.id.stringify.underscore.id}}_action_template
-        {{name.id.stringify.camelcase.id}}Action::Template.new(self)
+        ::Orma::Record::GenericModelActionTemplate.new({{name.id.stringify.camelcase.id}}Action.uri_path(id))
       end
 
       Crumble::Turbo::ActionRegistry.add({{@type.name}}::{{name.id.stringify.camelcase.id}}Action)
