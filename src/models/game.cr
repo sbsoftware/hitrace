@@ -27,6 +27,11 @@ class Game < ApplicationRecord
       height 100.percent
       backgroundColor "#999900"
     end
+
+    rule Target > any do
+      width 100.percent
+      height 100.percent
+    end
   end
 
   model_template :grid do
@@ -41,7 +46,7 @@ class Game < ApplicationRecord
               if target = targets.find { |t| t.pos_x == grid_x && t.pos_y == grid_y }
                 div Target do
                   target.hit_action_template.to_html do
-                    "Target!"
+                    nil # need to provide a block
                   end
                 end
               end
