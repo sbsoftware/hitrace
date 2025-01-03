@@ -28,7 +28,7 @@ spawn do
       Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)
     end
 
-    sleep 1.second
+    sleep 2.seconds
   end
 end
 
