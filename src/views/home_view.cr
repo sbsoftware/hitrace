@@ -1,5 +1,7 @@
-class HomeView
-  ToHtml.class_template do
+class HomeView < Crumble::ContextView
+  template do
+    SetNameAction::Template.new(ctx.session)
+
     ul do
       Game.all.each do |game|
         li do
