@@ -3,16 +3,18 @@ class HomeView < Crumble::ContextView
     SetNameAction::Template.new(ctx.session)
 
     ul do
-      Game.all.each do |game|
+      Room.all.each do |room|
         li do
-          a href: GameResource.uri_path(game.id) do
-            "Game##{game.id}"
+          "#{room.name} (#{room.id})"
+          room.join_action_template.to_html do
+            button { "Join" }
           end
         end
       end
     end
 
-    form action: GameResource.uri_path, method: "POST" do
+    form action: RoomResource.uri_path, method: "POST" do
+      input type: :text, name: "name"
       input type: :submit, name: "submit", value: "Create Game"
     end
   end
