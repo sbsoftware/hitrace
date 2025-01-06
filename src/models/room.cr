@@ -3,8 +3,22 @@ require "./room_player"
 
 class Room < ApplicationRecord
   column name : String
+  column game_id : Int64?
 
   has_many_of RoomPlayer
+
+  def ready?
+    game_id.nil? && room_players.size > 0 && room_players.all? do |room_player|
+      room_player.ready.value && room_player.online?
+    end
+  end
+
+  def reset!
+    self.game_id = nil
+    save
+
+    room_players.each(&.reset!)
+  end
 
   model_template :player_list do
     ul do
@@ -12,7 +26,7 @@ class Room < ApplicationRecord
         li do
           room_player.player_name
           " "
-          if (last_check = room_player.last_connection_check_at) && last_check >= 1.minute.ago
+          if room_player.online?
             "(online)"
           end
           if room_player.ready.value

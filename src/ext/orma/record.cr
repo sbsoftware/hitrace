@@ -73,6 +73,7 @@ module Orma
       values interval: Int
 
       js_method :connect do
+        this.submitTarget.click._call
         that = this
         _literal_js(
         <<-JS
@@ -84,7 +85,7 @@ module Orma
       end
 
       js_method :disconnect do
-        stopInterval(this.timer)
+        clearInterval(this.timer)
       end
     end
 
@@ -111,14 +112,14 @@ module Orma
       end
     end
 
-    macro health_check_action(name, refreshed_model_template, &blk)
+    macro health_check_action(name, interval, refreshed_model_template, &blk)
       model_action({{name}}, {{refreshed_model_template}}) do
         def self.action_template(model)
           ::Orma::Record::HealthCheckActionTemplate.new(self.uri_path(model.id), interval)
         end
 
         def self.interval
-          2000
+          {{interval}}.total_milliseconds.to_i
         end
 
         {{blk.body}}

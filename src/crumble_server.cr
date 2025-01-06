@@ -19,15 +19,45 @@ end
 
 spawn do
   loop do
-    Game.all.find_each do |game|
-      next if game.hit_targets.count >= 2
+    Room.all.find_each do |room|
+      next unless room.ready?
+
+      game = Game.new(size_x: 5, size_y: 5)
+      game.save
 
       if game_id = game.id
-        new_target = HitTarget.new(game_id: game_id, pos_x: rand(1..game.size_x.value), pos_y: rand(1..game.size_y.value))
-        new_target.save
+        room.room_players.each do |room_player|
+          game_player = GamePlayer.new(game_id: game_id, session_id: room_player.session_id, player_name: room_player.player_name, score: 0)
+          game_player.save
+        end
+
+        room.game_id = game_id
+        room.save
+      end
+    end
+
+    # TODO: Don't select completed games here?
+    Game.all.find_each do |game|
+      if !game.started? && game.game_players.all?(&.online?)
+        game.started_at = Time.utc
+        game.save
       end
 
-      Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)
+      if game.running? && game.hit_targets.count < 2
+        if game_id = game.id
+          new_target = HitTarget.new(game_id: game_id, pos_x: rand(1..game.size_x.value), pos_y: rand(1..game.size_y.value))
+          new_target.save
+        end
+
+        Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)
+      end
+
+      if game.finished?
+        room = Room.where({"game_id" => game.id}).first?
+        if room
+          room.reset!
+        end
+      end
     end
 
     sleep 2.seconds

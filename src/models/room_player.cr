@@ -11,13 +11,27 @@ class RoomPlayer < ApplicationRecord
     Room.find(room_id)
   end
 
-  health_check_action :connection_check, room.player_list do
+  health_check_action :connection_check, 5.seconds, room.player_list do
     def model_action_controller
       return unless model
       return unless model.session_id == ctx.session.id.to_s
 
       model.last_connection_check_at = Time.utc
       model.save
+
+      if game_id = model.room.game_id
+        ctx.response.status_code = 303
+        ctx.response.headers["Location"] = GameResource.uri_path(game_id)
+      end
     end
+  end
+
+  def online?
+    (last_check = last_connection_check_at) && last_check >= 10.seconds.ago
+  end
+
+  def reset!
+    self.ready = false
+    save
   end
 end

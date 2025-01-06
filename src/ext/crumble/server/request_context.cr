@@ -4,6 +4,10 @@ module Crumble::Server
       FileSessionStore.new("./tmp/sessions")
     end
 
+    def game_policy
+      GamePolicy.new(session)
+    end
+
     def room_policy
       RoomPolicy.new(session)
     end

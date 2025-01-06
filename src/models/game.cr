@@ -1,11 +1,26 @@
 require "./application_record"
 require "./hit_target"
+require "./game_player"
 
 class Game < ApplicationRecord
   column size_x : Int32
   column size_y : Int32
+  column started_at : Time?
 
   has_many_of HitTarget
+  has_many_of GamePlayer
+
+  def started?
+    !started_at.nil?
+  end
+
+  def running?
+    started? && !finished?
+  end
+
+  def finished?
+    started_at.try(&.<=(1.minute.ago))
+  end
 
   css_class Row
   css_class Cell
@@ -51,6 +66,22 @@ class Game < ApplicationRecord
                 end
               end
             end
+          end
+        end
+      end
+    end
+  end
+
+  model_template :leaderboard do
+    div do
+      game_players.each do |game_player|
+        div do
+          span do
+            game_player.player_name
+          end
+          " "
+          span do
+            game_player.score
           end
         end
       end
