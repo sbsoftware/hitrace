@@ -11,6 +11,10 @@ class Room < ApplicationRecord
       room_players.each do |room_player|
         li do
           room_player.player_name
+          " "
+          if (last_check = room_player.last_connection_check_at) && last_check >= 1.minute.ago
+            "(online)"
+          end
           if room_player.ready.value
             " (ready)"
           end
