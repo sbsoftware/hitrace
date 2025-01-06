@@ -42,6 +42,10 @@ module Orma
           {{name.id.stringify}}
         end
 
+        def self.action_template(model)
+          ::Orma::Record::GenericModelActionTemplate.new(self.uri_path(model.id))
+        end
+
         def self.model_class : {{@type.resolve}}.class
           {{@type.resolve}}
         end
@@ -58,7 +62,7 @@ module Orma
       end
 
       def {{name.id.stringify.underscore.id}}_action_template
-        ::Orma::Record::GenericModelActionTemplate.new({{name.id.stringify.camelcase.id}}Action.uri_path(id))
+        {{name.id.stringify.camelcase.id}}Action.action_template(self)
       end
 
       Crumble::Turbo::ActionRegistry.add({{@type.name}}::{{name.id.stringify.camelcase.id}}Action)
