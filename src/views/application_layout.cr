@@ -4,6 +4,7 @@ class ApplicationLayout
     html do
       head do
         title { "Hitrace" }
+        meta charset: "utf-8", name: "viewport", content: "width=device-width, initial-scale=1.0"
         link Game::Style
         link Orma::Record::GenericModelActionTemplate::Style
         link Orma::Record::HealthCheckActionTemplate::Style
