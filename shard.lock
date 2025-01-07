@@ -1,4 +1,3 @@
-# NOTICE: This lockfile contains some overrides from shard.override.yml
 version: 2.0
 shards:
   crumble:
@@ -9,9 +8,9 @@ shards:
     git: https://github.com/sbsoftware/crumble-stimulus.git
     version: 0.2.0
 
-  crumble-turbo: # Overridden
-    path: ../crumble-turbo
-    version: 0.8.3
+  crumble-turbo:
+    git: https://github.com/sbsoftware/crumble-turbo.git
+    version: 0.8.4
 
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
