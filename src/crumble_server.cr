@@ -7,7 +7,6 @@ require "./policies/**"
 require "./actions/**"
 require "./views/*"
 require "./resources/*"
-require "./styles/*"
 
 if ENV.fetch("ORMA_CONTINUOUS_MIGRATION", "").in?(["1", "true"])
   {% for orm_class in Orma::Record.all_subclasses %}
