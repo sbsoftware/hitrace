@@ -8,3 +8,4 @@
 shard.override.yml
 data.db
 watch.sh
+.deploy.yml
