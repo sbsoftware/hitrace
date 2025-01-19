@@ -53,6 +53,8 @@ spawn do
       if !game.started? && game.game_players.all?(&.online?)
         game.started_at = Time.utc
         game.save
+
+        Crumble::Turbo::ModelTemplateRefreshService.notify(game.default_view)
       end
 
       if game.running? && game.hit_targets.count < 2
