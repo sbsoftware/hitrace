@@ -5,7 +5,7 @@ class HomeView < Crumble::ContextView
     ul do
       Room.all.each do |room|
         li do
-          "#{room.name} (#{room.id})"
+          "#{room.name} (#{room.room_players.count})"
           room.join_action_template.to_html do
             button { "Join" }
           end
