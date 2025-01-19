@@ -21,7 +21,7 @@ spawn do
     Room.all.find_each do |room|
       next unless room.ready?
 
-      game = Game.new(size_x: 5, size_y: 5)
+      game = Game.new(size_x: 5, size_y: 5, room_id: room.id)
       game.save
 
       if game_id = game.id

@@ -15,6 +15,6 @@ license: MIT
 dependencies:
   crumble-turbo:
     github: sbsoftware/crumble-turbo
-    version: ">= 0.8.4"
+    version: ">= 0.8.5"
   sqlite3:
     github: crystal-lang/crystal-sqlite3

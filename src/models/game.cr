@@ -6,6 +6,7 @@ class Game < ApplicationRecord
   column size_x : Int32
   column size_y : Int32
   column started_at : Time?
+  column room_id : Int64?
 
   has_many_of HitTarget
   has_many_of GamePlayer
@@ -25,8 +26,13 @@ class Game < ApplicationRecord
   css_class Row
   css_class Cell
   css_class Target
+  css_class GameContainer
 
   style do
+    rule GameContainer do
+      display Flex
+    end
+
     rule Row do
       display Flex
     end
@@ -46,6 +52,21 @@ class Game < ApplicationRecord
     rule Target > any do
       width 100.percent
       height 100.percent
+    end
+  end
+
+  model_template :default_view do
+    div GameContainer do
+      if running?
+        div do
+          grid
+        end
+        div do
+          leaderboard
+        end
+      elsif finished?
+        GameSummaryView.new(model)
+      end
     end
   end
 
