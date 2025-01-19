@@ -14,10 +14,4 @@ macro style(&blk)
   end
 end
 
-macro stimulus_controller(name, &blk)
-  class {{name}} < Stimulus::Controller
-    {{blk.body}}
-  end
-end
-
 require "./crumble_server"
