@@ -4,6 +4,7 @@ require "./room_player"
 class Room < ApplicationRecord
   column name : String
   column game_id : Int64?
+  column last_game_started_at : Time?
 
   has_many_of RoomPlayer
 

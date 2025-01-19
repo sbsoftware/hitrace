@@ -11,6 +11,10 @@ class Game < ApplicationRecord
   has_many_of HitTarget
   has_many_of GamePlayer
 
+  def room
+    Room.where({"id" => room_id}).first?
+  end
+
   def started?
     !started_at.nil?
   end

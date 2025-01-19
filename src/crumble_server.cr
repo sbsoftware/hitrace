@@ -19,6 +19,18 @@ end
 spawn do
   loop do
     Room.all.find_each do |room|
+      if (last_game_at = room.last_game_started_at) && last_game_at < 2.minutes.ago
+        room.room_players.each do |room_player|
+          if (last_check = room_player.last_connection_check_at) && last_check < 60.seconds.ago
+            room_player.db.exec("DELETE FROM #{room_player.table_name} WHERE id=#{room_player.id}")
+          end
+        end
+
+        if room.room_players.empty?
+          room.db.exec("DELETE FROM #{room.table_name} WHERE id=#{room.id}")
+        end
+      end
+
       next unless room.ready?
 
       game = Game.new(size_x: 5, size_y: 5, room_id: room.id)
@@ -31,6 +43,7 @@ spawn do
         end
 
         room.game_id = game_id
+        room.last_game_started_at = Time.utc
         room.save
       end
     end
@@ -51,11 +64,8 @@ spawn do
         Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)
       end
 
-      if game.finished?
-        room = Room.where({"game_id" => game.id}).first?
-        if room
-          room.reset!
-        end
+      if game.finished? && (room = game.room) && room.game_id == game.id
+        room.reset!
       end
     end
 
