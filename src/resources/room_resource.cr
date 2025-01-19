@@ -24,7 +24,7 @@ class RoomResource < ApplicationResource
   end
 
   def show
-    unless room = Room.find(id)
+    unless room = Room.where({"id" => id}).first?
       redirect HomeResource.uri_path
       return
     end
