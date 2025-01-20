@@ -21,6 +21,7 @@ class SetNameAction < Crumble::Turbo::Action
     ctx.session.update!(player_name: name)
 
     Template.new(ctx.session).turbo_stream.to_html(ctx.response)
+    RoomListView.new(ctx).turbo_stream.to_html(ctx.response)
   end
 
   class Template
@@ -39,7 +40,7 @@ class SetNameAction < Crumble::Turbo::Action
     ToHtml.instance_template do
       div do
         form action: SetNameAction.uri_path, method: "POST" do
-          input type: :text, name: NAME_ATTR, value: session.player_name
+          input type: :text, name: NAME_ATTR, value: session.player_name, placeholder: "Name"
           input type: :submit, value: "OK"
         end
         if session.player_name
