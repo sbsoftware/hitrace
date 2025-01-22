@@ -42,15 +42,17 @@ class Room < ApplicationRecord
     def model_action_controller
       return unless model
 
-      unless model.room_players.any? { |rp| rp.session_id == ctx.session.id.to_s }
-        if (room_id = model.id) && (player_name = ctx.session.player_name)
+      unless player = model.room_players.any? { |rp| rp.session_id == ctx.session.id.to_s }
+        if (room_id = model.id) && model.game_id.nil? && (player_name = ctx.session.player_name)
           player = RoomPlayer.new(room_id: room_id, player_name: player_name, session_id: ctx.session.id.to_s)
           player.save
         end
       end
 
-      ctx.response.status_code = 303
-      ctx.response.headers["Location"] = RoomResource.uri_path(model_id)
+      if player
+        ctx.response.status_code = 303
+        ctx.response.headers["Location"] = RoomResource.uri_path(model_id)
+      end
     end
   end
 
