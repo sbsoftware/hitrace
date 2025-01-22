@@ -10,7 +10,7 @@ class RoomListView < Crumble::ContextView
   ToHtml.instance_template do
     if ctx.session.player_name.try(&.size).try(&.>(0))
       ul do
-        Room.all.each do |room|
+        Room.where({"game_id" => nil}).each do |room|
           li do
             "#{room.name} (#{room.room_players.count})"
             room.join_action_template.to_html do
