@@ -19,7 +19,7 @@ end
 spawn do
   loop do
     Room.all.find_each do |room|
-      if (last_game_at = room.last_game_started_at) && last_game_at < 2.minutes.ago
+      unless (last_game_at = room.last_game_started_at) && last_game_at > 3.minutes.ago
         room.room_players.each do |room_player|
           if (last_check = room_player.last_connection_check_at) && last_check < 60.seconds.ago
             room_player.db.exec("DELETE FROM #{room_player.table_name} WHERE id=#{room_player.id}")
