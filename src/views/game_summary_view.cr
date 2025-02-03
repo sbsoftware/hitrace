@@ -3,8 +3,18 @@ class GameSummaryView
 
   def initialize(@game); end
 
+  css_class GameSummary
+
+  style do
+    rule GameSummary do
+      display Flex
+      flexDirection Column
+      alignItems Center
+    end
+  end
+
   ToHtml.instance_template do
-    div do
+    div GameSummary do
       div style: "display: none;" do
         winner = game.game_players.max_by { |gp| gp.score.value }
       end

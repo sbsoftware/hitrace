@@ -31,26 +31,31 @@ class Game < ApplicationRecord
   css_class Cell
   css_class Target
   css_class GameContainer
+  css_class Grid
 
   style do
-    rule GameContainer do
-      display Flex
+    rule Grid do
+      width 100.vw
+      maxWidth 500.px
+      height 100.percent
     end
 
     rule Row do
       display Flex
+      width 100.percent
+      height 10.vh
     end
 
     rule Cell do
-      width 100.px
-      height 100.px
-      border 1.px, Solid, Black
+      width 20.percent
+      height 100.percent
+      border 1.px, Solid, White
     end
 
     rule Target do
       width 100.percent
       height 100.percent
-      backgroundColor "#999900"
+      backgroundColor "#32CD32"
     end
 
     rule Target > any do
@@ -78,7 +83,7 @@ class Game < ApplicationRecord
     span style: "display: none;" do
       targets = hit_targets.to_a
     end
-    div do
+    div Grid do
       (1..size_x.value).each do |grid_x|
         div Row do
           (1..size_y.value).each do |grid_y|
