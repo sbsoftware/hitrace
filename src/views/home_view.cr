@@ -7,7 +7,7 @@ class HomeView < Crumble::ContextView
     end
 
     rule HomeViewGrid > GameGridView::Grid do
-      prop("transform", "perspective(500px) rotateX(45deg) translate(0px, -100px)")
+      prop("transform", "perspective(800px) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-100px, -100px)")
       prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
     end
 
