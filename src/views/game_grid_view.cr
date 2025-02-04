@@ -1,9 +1,21 @@
 class GameGridView
   getter size_x : Int32
   getter size_y : Int32
-  getter targets : Array(HitTarget)
+  getter targets : Array(HitTarget) | Array(FakeTarget)
 
   def initialize(@size_x, @size_y, @targets); end
+
+  def initialize(@size_x, @size_y)
+    @targets = 2.times.map do
+      FakeTarget.new(rand(1..size_x), rand(1..size_y))
+    end.to_a
+  end
+
+  record FakeTarget, pos_x : Int32, pos_y : Int32 do
+    ToHtml.instance_template do
+      nil # empty template
+    end
+  end
 
   css_class Grid
   css_class Row
@@ -49,9 +61,7 @@ class GameGridView
             div Cell do
               if target = targets.find { |t| t.pos_x == grid_x && t.pos_y == grid_y }
                 div Target do
-                  target.hit_action_template.to_html do
-                    nil # need to provide a block
-                  end
+                  target
                 end
               end
             end

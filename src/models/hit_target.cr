@@ -23,4 +23,10 @@ class HitTarget < ApplicationRecord
       Crumble::Turbo::ModelTemplateRefreshService.notify(model.game.leaderboard)
     end
   end
+
+  ToHtml.instance_template do
+    hit_action_template.to_html do
+      nil
+    end
+  end
 end

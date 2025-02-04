@@ -10,10 +10,6 @@ class HomeView < Crumble::ContextView
       prop("transform", "perspective(800px) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-100px, -100px)")
       prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
     end
-
-    rule HomeViewGrid > GameGridView::Cell do
-      border 3.px, Solid, White
-    end
   end
 
   template do
@@ -22,7 +18,7 @@ class HomeView < Crumble::ContextView
     RoomListView.new(ctx)
 
     div HomeViewGrid do
-      GameGridView.new(size_x: 5, size_y: 5, targets: [] of HitTarget)
+      GameGridView.new(size_x: 5, size_y: 5)
     end
   end
 end
