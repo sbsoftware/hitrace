@@ -45,6 +45,7 @@ class GameGridView
       width 100.percent
       height 100.percent
       backgroundColor "#32CD32"
+      prop("box-shadow", "0px 0px 20px 10px rgba(0, 255, 0, 0.7)")
     end
 
     rule Target > any do
