@@ -47,7 +47,8 @@ class ApplicationLayout
         title { "Hitrace" }
         meta charset: "utf-8", name: "viewport", content: "width=device-width, initial-scale=1.0"
         link Style
-        link Game::Style
+        link HomeView::Style
+        link GameGridView::Style
         link GameSummaryView::Style
         link Orma::Record::GenericModelActionTemplate::Style
         link Orma::Record::HealthCheckActionTemplate::Style
