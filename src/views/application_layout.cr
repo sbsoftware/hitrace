@@ -1,4 +1,6 @@
-class ApplicationLayout
+class ApplicationLayout < ToHtml::Layout
+  include Crumble::ContextView
+
   css_class SiteHeading
   css_class SiteHeadingBegin
   css_class SiteHeadingEnd
@@ -40,31 +42,25 @@ class ApplicationLayout
     end
   end
 
-  ToHtml.class_template do
-    doctype "html"
-    html do
-      head do
-        title { "Hitrace" }
-        meta charset: "utf-8", name: "viewport", content: "width=device-width, initial-scale=1.0"
-        link Style
-        link HomeView::Style
-        link GameGridView::Style
-        link GameSummaryView::Style
-        link Orma::Record::GenericModelActionTemplate::Style
-        link Orma::Record::HealthCheckActionTemplate::Style
-        script src: "https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-umd.js"
-        script Crumble::StimulusControllers
-        style do
-          "@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik+Spray+Paint&display=swap');"
-        end
+  class FontInclude
+    ToHtml.class_template do
+      style do
+        "@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik+Spray+Paint&display=swap');"
       end
-      body Crumble::Turbo::ModelTemplateRefreshController do
-        h1(SiteHeading) do
-          span(SiteHeadingBegin) { "HIT" }
-          span(SiteHeadingEnd) { "RACE" }
-        end
-        yield
+    end
+  end
+
+  add_to_head Style, HomeView::Style, GameGridView::Style, GameSummaryView::Style
+  add_to_head FontInclude
+  add_to_head Orma::Record::HealthCheckActionTemplate::Style
+
+  ToHtml.instance_template do
+    super do
+      h1(SiteHeading) do
+        span(SiteHeadingBegin) { "HIT" }
+        span(SiteHeadingEnd) { "RACE" }
       end
+      yield
     end
   end
 end

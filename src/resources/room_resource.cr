@@ -33,6 +33,6 @@ class RoomResource < ApplicationResource
       return
     end
 
-    render RoomView.new(ctx, room)
+    render RoomView.new(ctx: ctx, room: room)
   end
 end

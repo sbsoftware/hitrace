@@ -10,4 +10,8 @@ class CSS::Stylesheet
       end
     end.join(", ")
   end
+
+  ToHtml.class_template do
+    link self
+  end
 end

@@ -1,7 +1,7 @@
-class GameView < Crumble::ContextView
-  getter game : Game
+class GameView
+  include Crumble::ContextView
 
-  def initialize(@ctx, @game); end
+  getter game : Game
 
   ToHtml.instance_template do
     game.game_players.find { |gp| gp.session_id == ctx.session.id.to_s }.try(&.connection_check_action_template)

@@ -21,7 +21,7 @@ class SetNameAction < Crumble::Turbo::Action
     ctx.session.update!(player_name: name)
 
     Template.new(ctx.session).turbo_stream.to_html(ctx.response)
-    RoomListView.new(ctx).turbo_stream.to_html(ctx.response)
+    RoomListView.new(ctx: ctx).turbo_stream.to_html(ctx.response)
   end
 
   class Template

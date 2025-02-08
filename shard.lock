@@ -2,15 +2,15 @@ version: 2.0
 shards:
   crumble:
     git: https://github.com/sbsoftware/crumble.git
-    version: 0.18.0
+    version: 0.19.1
 
   crumble-stimulus:
     git: https://github.com/sbsoftware/crumble-stimulus.git
-    version: 0.2.0
+    version: 0.3.0
 
   crumble-turbo:
     git: https://github.com/sbsoftware/crumble-turbo.git
-    version: 0.8.5
+    version: 0.9.0
 
   csuuid:
     git: https://github.com/wyhaines/csuuid.cr.git
@@ -42,7 +42,7 @@ shards:
 
   orma:
     git: https://github.com/sbsoftware/orma.git
-    version: 0.6.2
+    version: 0.7.0
 
   parse_date:
     git: https://github.com/wyhaines/parsedate.cr.git
@@ -74,5 +74,5 @@ shards:
 
   to_html:
     git: https://github.com/sbsoftware/to_html.cr.git
-    version: 1.1.0
+    version: 1.3.0
 

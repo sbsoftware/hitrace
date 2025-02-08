@@ -1,7 +1,7 @@
-class RoomView < Crumble::ContextView
-  getter room : Room
+class RoomView
+  include Crumble::ContextView
 
-  def initialize(@ctx, @room); end
+  getter room : Room
 
   ToHtml.instance_template do
     a href: HomeResource.uri_path do

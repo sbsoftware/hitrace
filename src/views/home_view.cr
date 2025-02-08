@@ -1,4 +1,6 @@
-class HomeView < Crumble::ContextView
+class HomeView
+  include Crumble::ContextView
+
   css_class HomeViewGrid
 
   style do
@@ -15,7 +17,7 @@ class HomeView < Crumble::ContextView
   template do
     SetNameAction::Template.new(ctx.session)
 
-    RoomListView.new(ctx)
+    RoomListView.new(ctx: ctx)
 
     div HomeViewGrid do
       GameGridView.new(size_x: 5, size_y: 5)

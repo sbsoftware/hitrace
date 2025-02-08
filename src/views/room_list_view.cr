@@ -1,4 +1,5 @@
-class RoomListView < Crumble::ContextView
+class RoomListView
+  include Crumble::ContextView
   include IdentifiableView
 
   element_id RoomListViewId
