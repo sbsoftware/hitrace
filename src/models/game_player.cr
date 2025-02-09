@@ -4,7 +4,7 @@ class GamePlayer < ApplicationRecord
   column game_id : Int64
   column player_name : String
   column session_id : String
-  column score : Int32
+  column score : Int32 = 0
   column last_connection_check_at : Time?
 
   def game

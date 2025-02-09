@@ -33,34 +33,28 @@ spawn do
 
       next unless room.ready?
 
-      game = Game.new(size_x: 5, size_y: 5, room_id: room.id)
-      game.save
+      game = Game.create(room_id: room.id)
 
-      if game_id = game.id
-        room.room_players.each do |room_player|
-          game_player = GamePlayer.new(game_id: game_id, session_id: room_player.session_id, player_name: room_player.player_name, score: 0)
-          game_player.save
-        end
-
-        room.game_id = game_id
-        room.last_game_started_at = Time.utc
-        room.save
+      room.room_players.each do |room_player|
+        GamePlayer.create(game_id: game.id, session_id: room_player.session_id, player_name: room_player.player_name)
       end
+
+      room.game_id = game.id
+      room.last_game_started_at = Time.utc
+      room.save
     end
 
     # TODO: Don't select completed games here?
     Game.all.find_each do |game|
       if !game.started? && game.game_players.all?(&.online?)
-        game.started_at = Time.utc
-        game.save
+        game.update(started_at: Time.utc)
 
         Crumble::Turbo::ModelTemplateRefreshService.notify(game.default_view)
       end
 
       if game.running? && game.hit_targets.count < 2
         if game_id = game.id
-          new_target = HitTarget.new(game_id: game_id, pos_x: rand(1..game.size_x.value), pos_y: rand(1..game.size_y.value))
-          new_target.save
+          HitTarget.create(game_id: game_id, pos_x: rand(1..game.size_x.value), pos_y: rand(1..game.size_y.value))
         end
 
         Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)

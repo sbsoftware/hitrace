@@ -44,8 +44,7 @@ class Room < ApplicationRecord
 
       unless player = model.room_players.any? { |rp| rp.session_id == ctx.session.id.to_s }
         if (room_id = model.id) && model.game_id.nil? && (player_name = ctx.session.player_name)
-          player = RoomPlayer.new(room_id: room_id, player_name: player_name, session_id: ctx.session.id.to_s)
-          player.save
+          player = RoomPlayer.create(room_id: room_id, player_name: player_name, session_id: ctx.session.id.to_s)
         end
       end
 

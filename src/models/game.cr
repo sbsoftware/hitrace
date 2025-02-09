@@ -3,8 +3,8 @@ require "./hit_target"
 require "./game_player"
 
 class Game < ApplicationRecord
-  column size_x : Int32
-  column size_y : Int32
+  column size_x : Int32 = 5
+  column size_y : Int32 = 5
   column started_at : Time?
   column room_id : Int64?
 
