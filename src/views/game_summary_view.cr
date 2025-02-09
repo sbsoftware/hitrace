@@ -36,6 +36,10 @@ class GameSummaryView
           a href: RoomResource.uri_path(room_id) do
             "Back to room"
           end
+        else
+          form action: WaitResource.uri_path, method: "POST" do
+            button { "Play again" }
+          end
         end
       end
     end
