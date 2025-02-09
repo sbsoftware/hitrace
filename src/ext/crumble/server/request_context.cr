@@ -4,6 +4,10 @@ module Crumble::Server
       FileSessionStore.new("./tmp/sessions")
     end
 
+    def session_cookie_max_age
+      3600.days
+    end
+
     def game_policy
       GamePolicy.new(session)
     end
