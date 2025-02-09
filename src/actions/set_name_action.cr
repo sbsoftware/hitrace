@@ -43,9 +43,6 @@ class SetNameAction < Crumble::Turbo::Action
           input type: :text, name: NAME_ATTR, value: session.player_name, placeholder: "Name"
           input type: :submit, value: "OK"
         end
-        if session.player_name
-          span { "OK" }
-        end
       end
     end
   end
