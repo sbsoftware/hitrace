@@ -2,6 +2,7 @@ class HomeView
   include Crumble::ContextView
 
   css_class HomeViewGrid
+  css_class PlayButton
 
   style do
     rule HomeViewGrid do
@@ -12,15 +13,25 @@ class HomeView
       prop("transform", "perspective(800px) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-100px, -100px)")
       prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
     end
+
+    rule PlayButton do
+      marginTop 10.px
+    end
   end
 
   template do
     SetNameAction::Template.new(ctx.session)
 
-    RoomListView.new(ctx: ctx)
+    div PlayButton do
+      form action: WaitResource.uri_path, method: "POST" do
+        button { "Play" }
+      end
+    end
 
     div HomeViewGrid do
       GameGridView.new(size_x: 5, size_y: 5)
     end
+
+    RoomListView.new(ctx: ctx)
   end
 end

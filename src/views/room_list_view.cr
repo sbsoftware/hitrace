@@ -23,7 +23,7 @@ class RoomListView
 
       form action: RoomResource.uri_path, method: "POST" do
         input type: :text, name: "name"
-        input type: :submit, name: "submit", value: "Create Game"
+        input type: :submit, name: "submit", value: "Create Room"
       end
     end
   end

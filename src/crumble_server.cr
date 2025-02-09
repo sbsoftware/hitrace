@@ -18,6 +18,28 @@ end
 
 spawn do
   loop do
+    WaitingPlayer.all.each do |waiting_player|
+      if waiting_player.created_at < 10.seconds.ago
+        waiting_player.destroy unless waiting_player.online?
+      end
+    end
+
+    WaitingPlayer.all.to_a.each_slice(2) do |waiting_players|
+      next unless waiting_players.size > 1
+      next unless waiting_players.all?(&.online?)
+      next if waiting_players.any? do |waiting_player|
+        GamePlayer.where({"session_id" => waiting_player.session_id}).any? do |game_player|
+          !game_player.game.finished?
+        end
+      end
+
+      new_game = Game.create
+
+      waiting_players.each do |waiting_player|
+        GamePlayer.create(game_id: new_game.id, session_id: waiting_player.session_id, player_name: waiting_player.player_name)
+      end
+    end
+
     Room.all.find_each do |room|
       unless (last_game_at = room.last_game_started_at) && last_game_at > 3.minutes.ago
         room.room_players.each do |room_player|
