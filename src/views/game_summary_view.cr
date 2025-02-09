@@ -30,9 +30,9 @@ class GameSummaryView
           "Home"
         end
 
-        "&nbsp; | &nbsp;"
-
         if room_id = game.room_id
+          "&nbsp; | &nbsp;"
+
           a href: RoomResource.uri_path(room_id) do
             "Back to room"
           end
