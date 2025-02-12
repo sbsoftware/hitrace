@@ -6,14 +6,10 @@ module Orma
 
       js_method :connect do
         this.submitTarget.click._call
-        that = this
-        _literal_js(
-        <<-JS
-        this.timer = setInterval(function() {
-          that.submitTarget.click();
-        }, this.intervalValue);
-        JS
-        )
+
+        this.timer = setInterval(-> {
+          this.submitTarget.click._call
+        }, this.intervalValue)
       end
 
       js_method :disconnect do

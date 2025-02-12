@@ -1,3 +1,21 @@
+# TODO: Move this to crumble/css.cr
+class TTFFile < AssetFile
+  def mime_type
+    "font/ttf"
+  end
+end
+
+class TXTFile < AssetFile
+  def mime_type
+    "text/plain"
+  end
+end
+
+OutfitRegular = TTFFile.register "assets/fonts/Outfit/Outfit-Regular.ttf", "#{__DIR__}/../../assets/fonts/Outfit/Outfit-Regular.ttf"
+OutfitLicense = TXTFile.register "assets/fonts/Outfit/OFL.txt", "#{__DIR__}/../../assets/fonts/Outfit/OFL.txt"
+RubikSprayPaintRegular = TTFFile.register "assets/fonts/RubikSprayPaint/RubikSprayPaint.ttf", "#{__DIR__}/../../assets/fonts/Rubik_Spray_Paint/RubikSprayPaint-Regular.ttf"
+RubikSprayPaintLicense = TXTFile.register "assets/fonts/RubikSprayPaint/OFL.txt", "#{__DIR__}/../../assets/fonts/Rubik_Spray_Paint/OFL.txt"
+
 class ApplicationLayout < ToHtml::Layout
   include Crumble::ContextView
 
@@ -6,6 +24,20 @@ class ApplicationLayout < ToHtml::Layout
   css_class SiteHeadingEnd
 
   style do
+    comment "License: https://hitrace.fun#{OutfitLicense.uri_path}"
+    font_face do
+      fontFamily "Outfit"
+      fontStyle Normal
+      src url(OutfitRegular.uri_path)
+    end
+
+    comment "License: https://hitrace.fun#{RubikSprayPaintLicense.uri_path}"
+    font_face do
+      fontFamily "Rubik Spray Paint"
+      fontStyle Normal
+      src url(RubikSprayPaintRegular.uri_path)
+    end
+
     rule html do
       height 100.percent
       prop("background", "linear-gradient(180deg, rgba(2,7,13,1) 0%, rgba(20,80,139,1) 35%, rgba(84,60,182,1) 71%, rgba(76,30,119,1) 100%)")
@@ -42,16 +74,7 @@ class ApplicationLayout < ToHtml::Layout
     end
   end
 
-  class FontInclude
-    ToHtml.class_template do
-      style do
-        "@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Rubik+Spray+Paint&display=swap');"
-      end
-    end
-  end
-
   add_to_head Style, HomeView::Style, GameGridView::Style, GameSummaryView::Style
-  add_to_head FontInclude
   add_to_head Orma::Record::HealthCheckActionTemplate::Style
 
   ToHtml.instance_template do
