@@ -1,10 +1,25 @@
+require "./leaderboard_view"
+
 class HomeView
   include Crumble::ContextView
 
+  css_class TopRow
+  css_class TopColumn
   css_class HomeViewGrid
   css_class PlayButton
 
   style do
+    rule TopRow do
+      display Flex
+      width 100.vw
+      maxWidth 650.px
+    end
+
+    rule TopColumn do
+      width 50.percent
+      padding 5.px
+    end
+
     rule HomeViewGrid do
       prop("margin-top", 15.px)
     end
@@ -20,11 +35,20 @@ class HomeView
   end
 
   template do
-    SetNameAction::Template.new(ctx.session)
+    div TopRow do
+      div TopColumn do
+        LeaderboardView.new(ctx: ctx)
+      end
+      div TopColumn do
+        SetNameAction::Template.new(ctx.session)
 
-    div PlayButton do
-      form action: WaitResource.uri_path, method: "POST" do
-        button { "Play" }
+        if ctx.session.player_name
+          div PlayButton do
+            form action: WaitResource.uri_path, method: "POST" do
+              button { "Play" }
+            end
+          end
+        end
       end
     end
 

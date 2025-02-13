@@ -74,7 +74,7 @@ class ApplicationLayout < ToHtml::Layout
     end
   end
 
-  add_to_head Style, HomeView::Style, GameGridView::Style, GameSummaryView::Style
+  add_to_head Style, HomeView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
   add_to_head Orma::Record::HealthCheckActionTemplate::Style
 
   ToHtml.instance_template do
