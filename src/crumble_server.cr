@@ -16,6 +16,11 @@ if ENV.fetch("ORMA_CONTINUOUS_MIGRATION", "").in?(["1", "true"])
   {% end %}
 end
 
+# TODO: Remove again
+Game.db.exec <<-SQL
+UPDATE games SET processing_completed=1 WHERE processing_completed IS NULL;
+SQL
+
 spawn do
   loop do
     WaitingPlayer.all.each do |waiting_player|
@@ -67,7 +72,7 @@ spawn do
     end
 
     # TODO: Don't select completed games here?
-    Game.all.find_each do |game|
+    Game.where({"processing_completed" => false}).find_each do |game|
       if !game.started? && game.game_players.all?(&.online?)
         game.update(started_at: Time.utc)
 
@@ -82,8 +87,23 @@ spawn do
         Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)
       end
 
-      if game.finished? && (room = game.room) && room.game_id == game.id
-        room.reset!
+      if game.finished?
+        game_players = game.game_players.to_a
+        if game.room_id.nil? && game_players.size == 2
+          winner = game_players.max_by(&.score.value)
+
+          unless game_players.select { |gp| gp.score == winner.score }.size > 1
+            if entry = LeaderboardEntry.where({"session_id" => winner.session_id}).first?
+              entry.update(games_won: entry.games_won.value + 1)
+            else
+              LeaderboardEntry.create(session_id: winner.session_id, player_name: winner.player_name, games_won: 1_i64)
+            end
+          end
+        elsif (room = game.room) && room.game_id == game.id
+          room.reset!
+        end
+
+        game.update(processing_completed: true)
       end
     end
 

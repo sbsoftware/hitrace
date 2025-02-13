@@ -7,6 +7,7 @@ class Game < ApplicationRecord
   column size_y : Int32 = 5
   column started_at : Time?
   column room_id : Int64?
+  column processing_completed : Bool = false
 
   has_many_of HitTarget
   has_many_of GamePlayer
