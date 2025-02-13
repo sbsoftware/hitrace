@@ -87,7 +87,7 @@ spawn do
       end
     end
 
-    sleep 2.seconds
+    sleep 1.second
   end
 end
 
