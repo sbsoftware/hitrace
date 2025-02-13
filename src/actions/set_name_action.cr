@@ -40,8 +40,8 @@ class SetNameAction < Crumble::Turbo::Action
     ToHtml.instance_template do
       div do
         form action: SetNameAction.uri_path, method: "POST" do
-          input type: :text, name: NAME_ATTR, value: session.player_name, placeholder: "Name"
-          input type: :submit, value: "OK"
+          input type: :text, name: NAME_ATTR, value: session.player_name, placeholder: "Player Name"
+          input type: :submit, value: "Change Name"
         end
       end
     end
