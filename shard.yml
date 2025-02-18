@@ -18,3 +18,6 @@ dependencies:
     version: ">= 0.9.0"
   sqlite3:
     github: crystal-lang/crystal-sqlite3
+  to_html:
+    github: sbsoftware/to_html.cr
+    version: ">= 1.4.0"

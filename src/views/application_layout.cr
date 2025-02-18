@@ -74,8 +74,21 @@ class ApplicationLayout < ToHtml::Layout
     end
   end
 
-  add_to_head Style, HomeView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
-  add_to_head Orma::Record::HealthCheckActionTemplate::Style
+  class JsErrorHandler < JS::Code
+    def_to_js do
+      self.addEventListener("error", ->(event) {
+        window.alert(event.message)
+      })
+      self.addEventListener("unhandledrejection", ->(event) {
+        window.alert(event.reason)
+      })
+    end
+  end
+
+  prepend_to_head JsErrorHandler
+
+  append_to_head Style, HomeView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
+  append_to_head Orma::Record::HealthCheckActionTemplate::Style
 
   ToHtml.instance_template do
     super do
