@@ -6,7 +6,6 @@ class HomeView
   css_class TopRow
   css_class TopColumn
   css_class HomeViewGrid
-  css_class PlayButton
 
   style do
     rule TopRow do
@@ -28,10 +27,6 @@ class HomeView
       prop("transform", "perspective(800px) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-100px, -100px)")
       prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
     end
-
-    rule PlayButton do
-      marginTop 10.px
-    end
   end
 
   template do
@@ -42,13 +37,7 @@ class HomeView
       div TopColumn do
         SetNameAction::Template.new(ctx.session)
 
-        if ctx.session.player_name
-          div PlayButton do
-            form action: WaitResource.uri_path, method: "POST" do
-              button { "Play" }
-            end
-          end
-        end
+        PlayButtonView.new(ctx: ctx)
       end
     end
 
