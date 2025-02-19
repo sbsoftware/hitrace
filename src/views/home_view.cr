@@ -45,6 +45,6 @@ class HomeView
       GameGridView.new(size_x: 5, size_y: 5)
     end
 
-    RoomListView.new(ctx: ctx)
+    # RoomListView.new(ctx: ctx)
   end
 end

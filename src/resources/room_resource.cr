@@ -7,6 +7,7 @@ class RoomResource < ApplicationResource
       return
     end
 
+    # FIXME: This doesn't work anymore with non-nilable `id` and current `orma` version
     room = Room.from_http_params(body.gets_to_end)
     if ctx.room_policy.create?(room)
       room.save
