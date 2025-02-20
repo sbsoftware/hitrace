@@ -26,13 +26,14 @@ class GameGridView
     rule Grid do
       width 100.vw
       maxWidth 500.px
-      height 100.percent
+      height "auto"
+      prop("aspect-ratio", "1 / 1")
     end
 
     rule Row do
       display Flex
       width 100.percent
-      height 10.vh
+      height 20.percent
     end
 
     rule Cell do
