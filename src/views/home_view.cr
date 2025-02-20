@@ -3,20 +3,27 @@ require "./leaderboard_view"
 class HomeView
   include Crumble::ContextView
 
-  css_class TopRow
-  css_class TopColumn
+  css_class TopContainer
+  css_class TopBox
   css_class HomeViewGrid
 
   style do
-    rule TopRow do
+    rule TopContainer do
       display Flex
+      flexDirection ColumnReverse
+      alignItems Center
       width 100.vw
       maxWidth 650.px
     end
 
-    rule TopColumn do
-      width 50.percent
+    rule TopBox do
+      display Flex
+      flexDirection Column
+      justifyContent Center
+      alignItems Center
+      width 80.percent
       padding 5.px
+      marginTop 10.px
     end
 
     rule HomeViewGrid do
@@ -30,11 +37,11 @@ class HomeView
   end
 
   template do
-    div TopRow do
-      div TopColumn do
+    div TopContainer do
+      div TopBox do
         LeaderboardView.new(ctx: ctx)
       end
-      div TopColumn do
+      div TopBox do
         SetNameAction::Template.new(ctx.session)
 
         PlayButtonView.new(ctx: ctx)

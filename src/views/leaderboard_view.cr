@@ -6,9 +6,11 @@ class LeaderboardView
 
   style do
     rule Leaderboard do
+      width 100.percent
       border 1.px, Solid, White
       prop("border-radius", 5.px)
       padding 5.px
+      boxSizing BorderBox
     end
 
     rule Entry do
