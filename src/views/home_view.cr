@@ -1,4 +1,5 @@
 require "./leaderboard_view"
+require "./legal_menu_view"
 
 class HomeView
   include Crumble::ContextView
@@ -60,5 +61,7 @@ class HomeView
     end
 
     # RoomListView.new(ctx: ctx)
+
+    LegalMenuView
   end
 end
