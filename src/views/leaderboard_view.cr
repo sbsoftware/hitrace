@@ -26,7 +26,7 @@ class LeaderboardView
         span { "Wins" }
       end
       hr
-      LeaderboardEntry.all.to_a.sort_by(&.games_won.value).last(5).each do |entry|
+      LeaderboardEntry.all.to_a.sort_by(&.games_won.value.*(-1)).first(5).each do |entry|
         div Entry do
           span { entry.player_name }
           span { entry.games_won }
