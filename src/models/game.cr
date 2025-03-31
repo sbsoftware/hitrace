@@ -25,7 +25,7 @@ class Game < ApplicationRecord
   end
 
   def finished?
-    started_at.try(&.<=(1.minute.ago)) || false
+    started_at.try(&.<=(30.seconds.ago)) || false
   end
 
   css_class GameContainer
