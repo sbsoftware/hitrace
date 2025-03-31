@@ -16,11 +16,6 @@ if ENV.fetch("ORMA_CONTINUOUS_MIGRATION", "").in?(["1", "true"])
   {% end %}
 end
 
-# TODO: Remove again
-Game.db.exec <<-SQL
-UPDATE games SET processing_completed=1 WHERE processing_completed IS NULL;
-SQL
-
 spawn do
   loop do
     WaitingPlayer.all.each do |waiting_player|
