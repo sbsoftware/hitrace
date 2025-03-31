@@ -62,6 +62,10 @@ class ApplicationLayout < ToHtml::Layout
       fontWeight Normal
     end
 
+    rule SiteHeading >> a do
+      textDecoration None
+    end
+
     rule SiteHeadingBegin do
       prop("text-shadow", outline_shadow("#8F7", 5))
       color "#c829d1"
@@ -93,8 +97,10 @@ class ApplicationLayout < ToHtml::Layout
   ToHtml.instance_template do
     super do
       h1(SiteHeading) do
-        span(SiteHeadingBegin) { "HIT" }
-        span(SiteHeadingEnd) { "RACE" }
+        a HomeResource do
+          span(SiteHeadingBegin) { "HIT" }
+          span(SiteHeadingEnd) { "RACE" }
+        end
       end
       yield
     end
