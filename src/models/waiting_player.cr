@@ -14,13 +14,24 @@ class WaitingPlayer < ApplicationRecord
   end
 
   health_check_action :connection_check, 2.seconds, spinner do
-    controller do
-      model.update(last_connection_check_at: Time.utc)
+    def waiting_player
+      WaitingPlayer.where({"id" => model_id}).first?
+    end
 
+    controller do
       if game_player = GamePlayer.where({"session_id" => ctx.session.id.to_s}).find { |gp| !gp.game.finished? }
         ctx.response.status_code = 303
         ctx.response.headers["Location"] = GameResource.uri_path(game_player.game_id)
+        return
       end
+
+      if (waiting_player = self.waiting_player).nil?
+        ctx.response.status_code = 303
+        ctx.response.headers["Location"] = HomeResource.uri_path
+        return
+      end
+
+      waiting_player.update(last_connection_check_at: Time.utc)
     end
   end
 end
