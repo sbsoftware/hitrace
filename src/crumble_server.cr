@@ -5,6 +5,7 @@ require "./ext/**"
 require "./models/*"
 require "./policies/**"
 require "./actions/**"
+require "./services/**"
 require "./views/*"
 require "./resources/*"
 
@@ -26,18 +27,8 @@ spawn do
 
     WaitingPlayer.all.to_a.each_slice(2) do |waiting_players|
       next unless waiting_players.size > 1
-      next unless waiting_players.all?(&.online?)
-      next if waiting_players.any? do |waiting_player|
-        GamePlayer.where({"session_id" => waiting_player.session_id}).any? do |game_player|
-          !game_player.game.finished?
-        end
-      end
 
-      new_game = Game.create
-
-      waiting_players.each do |waiting_player|
-        GamePlayer.create(game_id: new_game.id, session_id: waiting_player.session_id, player_name: waiting_player.player_name)
-      end
+      GameService.create_game({waiting_players[0], waiting_players[1]})
     end
 
     Room.all.find_each do |room|
