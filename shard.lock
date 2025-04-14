@@ -2,7 +2,7 @@ version: 2.0
 shards:
   crumble:
     git: https://github.com/sbsoftware/crumble.git
-    version: 0.20.0
+    version: 0.21.0
 
   crumble-stimulus:
     git: https://github.com/sbsoftware/crumble-stimulus.git
