@@ -2,6 +2,7 @@ class WaitResource < ApplicationResource
   def index
     unless player = WaitingPlayer.where({"session_id" => ctx.session.id.to_s}).first?
       redirect HomeResource.uri_path
+      return
     end
 
     render WaitView.new(ctx: ctx, waiting_player: player)
