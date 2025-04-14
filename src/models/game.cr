@@ -3,6 +3,8 @@ require "./hit_target"
 require "./game_player"
 
 class Game < ApplicationRecord
+  GAME_DURATION = 30.seconds
+
   column size_x : Int32 = 5
   column size_y : Int32 = 5
   column started_at : Time?
@@ -25,28 +27,7 @@ class Game < ApplicationRecord
   end
 
   def finished?
-    started_at.try(&.<=(30.seconds.ago)) || false
-  end
-
-  css_class GameContainer
-
-  model_template :default_view do
-    div GameContainer do
-      if running?
-        div do
-          grid
-        end
-        div do
-          leaderboard
-        end
-      elsif finished?
-        GameSummaryView.new(model)
-      end
-    end
-  end
-
-  model_template :grid do
-    GameGridView.new(size_x: size_x.value, size_y: size_y.value, targets: hit_targets.to_a)
+    started_at.try(&.<=(GAME_DURATION.ago)) || false
   end
 
   model_template :leaderboard do

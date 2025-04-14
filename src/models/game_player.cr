@@ -7,29 +7,43 @@ class GamePlayer < ApplicationRecord
   column score : Int32 = 0
   column last_connection_check_at : Time?
 
+  @game : Game?
+
   def game
-    Game.find(game_id)
+    @game ||= Game.find(game_id)
   end
 
   def online?
     (last_check_at = last_connection_check_at) && last_check_at >= 5.seconds.ago
   end
 
-  health_check_action :connection_check, 2.seconds, game.default_view do
-    def model_action_controller
-      return unless model
+  def target_visible_at(hit_target)
+    (game.started_at.try(&.value) || Time.utc) + hit_target.delay_ms.value.milliseconds + 100.milliseconds
+  end
 
-      game = model.game
+  css_class GameContainer
 
-      if game
-        model.last_connection_check_at = Time.utc
-        model.save
-
-        model_template.turbo_stream.to_html(ctx.response)
-      else
-        ctx.response.status_code = 303
-        ctx.response.headers["Location"] = HomeResource.uri_path
+  model_template :game_view do
+    div GameContainer do
+      if game.running?
+        div do
+          grid
+        end
+        div do
+          game.leaderboard
+        end
+      elsif game.finished?
+        GameSummaryView.new(model.game)
       end
     end
+  end
+
+  model_template :grid do
+    GameGridView.new(
+      size_x: game.size_x.value,
+      size_y: game.size_y.value,
+      targets: game.hit_targets.to_a,
+      game_player: model
+    )
   end
 end

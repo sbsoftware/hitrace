@@ -57,20 +57,13 @@ spawn do
       room.save
     end
 
-    # TODO: Don't select completed games here?
     Game.where({"processing_completed" => false}).find_each do |game|
       if !game.started? && game.game_players.all?(&.online?)
         game.update(started_at: Time.utc)
 
-        Crumble::Turbo::ModelTemplateRefreshService.notify(game.default_view)
-      end
-
-      if game.running? && game.hit_targets.count < 2
-        if game_id = game.id
-          HitTarget.create(game_id: game_id, pos_x: rand(1..game.size_x.value), pos_y: rand(1..game.size_y.value))
+        game.game_players.each do |game_player|
+          Crumble::Turbo::ModelTemplateRefreshService.notify(game_player.game_view)
         end
-
-        Crumble::Turbo::ModelTemplateRefreshService.notify(game.grid)
       end
 
       if game.finished?

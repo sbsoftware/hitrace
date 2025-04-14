@@ -3,9 +3,13 @@ class GameView
 
   getter game : Game
 
-  ToHtml.instance_template do
-    game.game_players.find { |gp| gp.session_id == ctx.session.id.to_s }.try(&.connection_check_action_template)
+  def game_player : GamePlayer
+    game.game_players.find! do |gp|
+      gp.session_id == ctx.session.id.to_s
+    end
+  end
 
-    game.default_view
+  ToHtml.instance_template do
+    game_player.game_view
   end
 end
