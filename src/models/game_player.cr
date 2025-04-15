@@ -36,7 +36,7 @@ class GamePlayer < ApplicationRecord
   end
 
   def target_visible_at(hit_target)
-    (game.started_at.try(&.value) || Time.utc) + hit_target.delay_ms.value.milliseconds + delay_ms.milliseconds
+    (game.started_at.try(&.value) || Time.utc) + hit_target.delay_ms.value.milliseconds - delay_ms.milliseconds
   end
 
   css_class GameContainer
