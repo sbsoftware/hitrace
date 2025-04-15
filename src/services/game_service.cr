@@ -13,7 +13,6 @@ class GameService
 
     waiting_players.each do |waiting_player|
       GamePlayer.create(game_id: game.id, session_id: waiting_player.session_id, player_name: waiting_player.player_name)
-      waiting_player.destroy
     end
 
     Game::GAME_DURATION.total_seconds.to_i.times do |i|

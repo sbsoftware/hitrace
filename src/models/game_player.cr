@@ -1,31 +1,53 @@
 require "./application_record"
+require "./game_player_time_sync"
 
 class GamePlayer < ApplicationRecord
   column game_id : Int64
   column player_name : String
   column session_id : String
   column score : Int32 = 0
-  column last_connection_check_at : Time?
+  # TODO: Bug in orma forces us to silently leave this column in
+  # deprecated_column last_connection_check_at : Time?
+
+  has_many_of GamePlayerTimeSync
 
   @game : Game?
+  @sync_delays : Array(Int64)?
 
   def game
     @game ||= Game.find(game_id)
   end
 
-  def online?
-    (last_check_at = last_connection_check_at) && last_check_at >= 5.seconds.ago
+  def ready?
+    game_player_time_syncs.count >= 5
+  end
+
+  def sync_delays
+    @sync_delays ||= game_player_time_syncs.to_a.reduce([] of Int64) do |memo, time_sync|
+      memo << (time_sync.server_time_ms.value - time_sync.client_time_ms.value)
+      memo
+    end
+  end
+
+  def delay_ms : Int64
+    return 0_i64 if sync_delays.empty?
+
+    sync_delays.sort![(sync_delays.size / 2).to_i - 1]
   end
 
   def target_visible_at(hit_target)
-    (game.started_at.try(&.value) || Time.utc) + hit_target.delay_ms.value.milliseconds + 100.milliseconds
+    (game.started_at.try(&.value) || Time.utc) + hit_target.delay_ms.value.milliseconds + delay_ms.milliseconds
   end
 
   css_class GameContainer
 
   model_template :game_view do
     div GameContainer do
-      if game.running?
+      if !game.started?
+        p do
+          "Loading"
+        end
+      elsif game.running?
         div do
           grid
         end
@@ -45,5 +67,67 @@ class GamePlayer < ApplicationRecord
       targets: game.hit_targets.to_a,
       game_player: model
     )
+  end
+
+  stimulus_controller TimeSyncController do
+    targets :submit, :time
+
+    js_method :connect do
+      this.timeTarget.value = Date.now._call
+      this.submitTarget.click._call
+
+      that = this
+      [200, 400, 600, 800].forEach do |delay|
+        setTimeout(-> {
+          that.timeTarget.value = Date.now._call
+          that.submitTarget.click._call
+        }, delay)
+      end
+    end
+  end
+
+  class TimeSyncTemplate
+    getter action_path : String
+
+    def initialize(@action_path); end
+
+    css_class Form
+
+    style do
+      rule Form do
+        display None
+      end
+    end
+
+    ToHtml.instance_template do
+      div TimeSyncController do
+        form Form, action: action_path, method: "POST" do
+          input TimeSyncController.time_target, type: :hidden, name: "time", value: "0"
+          input TimeSyncController.submit_target, type: :submit, name: "submit"
+        end
+      end
+    end
+  end
+
+  model_action :time_sync, game_view do
+    def self.action_template(model)
+      TimeSyncTemplate.new(self.uri_path(model.id))
+    end
+
+    controller do
+      return unless body = ctx.request.body
+
+      time = nil
+      HTTP::Params.parse(body.gets_to_end) do |key, value|
+        case key
+        when "time"
+          time = value.to_i64
+        end
+      end
+
+      return unless time
+
+      GamePlayerTimeSync.create(game_player_id: model.id, client_time_ms: time, server_time_ms: Time.utc.to_unix_ms)
+    end
   end
 end
