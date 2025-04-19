@@ -67,6 +67,10 @@ class GameGridView
       height 100.percent
     end
 
+    rule Target & ":active" do
+      backgroundColor "#ffa500"
+    end
+
     rule HiddenTarget do
       display None
     end
