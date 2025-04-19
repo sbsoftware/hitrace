@@ -49,10 +49,10 @@ class GamePlayer < ApplicationRecord
         end
       elsif game.running?
         div do
-          grid
+          game.leaderboard
         end
         div do
-          game.leaderboard
+          grid
         end
       elsif game.finished?
         GameSummaryView.new(model.game)
