@@ -1,15 +1,15 @@
-class GameLeaderboardView
+class GameScoreboardView
   getter game : Game
 
   def initialize(@game); end
 
-  css_class Leaderboard
+  css_class Scoreboard
   css_class Player
   css_class PlayerName
   css_class PlayerScore
 
   style do
-    rule Leaderboard do
+    rule Scoreboard do
       display Flex
       justifyContent SpaceBetween
       width 100.vw
@@ -50,7 +50,7 @@ class GameLeaderboardView
   end
 
   ToHtml.instance_template do
-    div Leaderboard do
+    div Scoreboard do
       game.game_players.each do |game_player|
         div Player do
           span PlayerName do

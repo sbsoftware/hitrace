@@ -1,7 +1,7 @@
 require "./application_record"
 require "./hit_target"
 require "./game_player"
-require "../views/game_leaderboard_view"
+require "../views/game_scoreboard_view"
 
 class Game < ApplicationRecord
   GAME_DURATION = 30.seconds
@@ -32,6 +32,6 @@ class Game < ApplicationRecord
   end
 
   model_template :leaderboard do
-    GameLeaderboardView.new(game: model)
+    GameScoreboardView.new(game: model)
   end
 end
