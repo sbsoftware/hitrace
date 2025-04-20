@@ -94,6 +94,7 @@ class ApplicationLayout < ToHtml::Layout
   append_to_head Style, HomeView::Style, LegalMenuView::Style, PlayButtonView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style, LegalNoticeView::Style
   append_to_head Orma::Record::HealthCheckActionTemplate::Style
   append_to_head GamePlayer::TimeSyncTemplate::Style
+  append_to_head GameLeaderboardView::Style
 
   ToHtml.instance_template do
     super do
