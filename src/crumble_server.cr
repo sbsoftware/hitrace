@@ -1,13 +1,4 @@
-require "sqlite3"
-require "orma"
-require "crumble-turbo"
-require "./ext/**"
-require "./models/*"
-require "./policies/**"
-require "./actions/**"
-require "./services/**"
-require "./views/*"
-require "./resources/*"
+require "./environment"
 
 if ENV.fetch("ORMA_CONTINUOUS_MIGRATION", "").in?(["1", "true"])
   {% for orm_class in Orma::Record.all_subclasses %}

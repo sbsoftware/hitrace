@@ -49,7 +49,7 @@ class GamePlayer < ApplicationRecord
   def player_color_class
     other_player = game.game_players.find! { |gp| gp != self }
 
-    other_player.id > id ? PlayerColor2 : PlayerColor1
+    other_player.id > id ? PlayerColor1 : PlayerColor2
   end
 
   css_class GameContainer

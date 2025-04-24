@@ -7,5 +7,6 @@
 
 shard.override.yml
 data.db
+test.db
 watch.sh
 .deploy.yml
