@@ -59,10 +59,12 @@ class GamePlayer < ApplicationRecord
   style do
     rule PlayerColor1 do
       backgroundColor "#FF7675"
+      prop("box-shadow", "none")
     end
 
     rule PlayerColor2 do
       backgroundColor "#74B9FF"
+      prop("box-shadow", "none")
     end
   end
 
