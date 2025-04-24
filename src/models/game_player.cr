@@ -39,7 +39,32 @@ class GamePlayer < ApplicationRecord
     (game.started_at.try(&.value) || Time.utc) + hit_target.delay_ms.value.milliseconds - delay_ms.milliseconds
   end
 
+  def target_visible_until(hit_target)
+    hit_at = hit_target.hit_at_ms
+    return 1.hour.from_now unless hit_at
+
+    Time.unix_ms(hit_at.value) - delay_ms.milliseconds + 500.milliseconds
+  end
+
+  def player_color_class
+    other_player = game.game_players.find! { |gp| gp != self }
+
+    other_player.id > id ? PlayerColor2 : PlayerColor1
+  end
+
   css_class GameContainer
+  css_class PlayerColor1
+  css_class PlayerColor2
+
+  style do
+    rule PlayerColor1 do
+      backgroundColor "#FF7675"
+    end
+
+    rule PlayerColor2 do
+      backgroundColor "#74B9FF"
+    end
+  end
 
   model_template :game_view do
     div GameContainer do

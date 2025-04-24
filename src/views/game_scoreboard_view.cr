@@ -24,14 +24,6 @@ class GameScoreboardView
       prop("border-radius", "5px 5px 0 0")
     end
 
-    rule Player & ":nth-child(1)" do
-      backgroundColor "#FF7675"
-    end
-
-    rule Player& ":nth-child(2)" do
-      backgroundColor "#74B9FF"
-    end
-
     rule (Player & ":nth-child(1)") >> PlayerName do
       prop("order", 1)
     end
@@ -52,7 +44,7 @@ class GameScoreboardView
   ToHtml.instance_template do
     div Scoreboard do
       game.game_players.each do |game_player|
-        div Player do
+        div Player, game_player.player_color_class do
           span PlayerName do
             game_player.player_name
           end
