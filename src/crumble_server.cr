@@ -59,7 +59,8 @@ spawn do
 
     Game.where({"processing_completed" => false}).find_each do |game|
       if !game.started? && game.game_players.all?(&.ready?)
-        game.update(started_at: Time.utc)
+        now = Time.utc
+        game.update(started_at: now.shift(nanoseconds: 1000000000 - now.nanosecond))
 
         game.game_players.each do |game_player|
           Crumble::Turbo::ModelTemplateRefreshService.notify(game_player.game_view)
