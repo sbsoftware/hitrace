@@ -129,14 +129,17 @@ class GameGridView
   end
 
   ToHtml.instance_template do
+    now = Time.utc.to_unix_ms
     div Grid do
       (1..size_x).each do |grid_x|
         div Row do
           (1..size_y).each do |grid_y|
             div Cell do
               targets.select { |t| t.pos_x == grid_x && t.pos_y == grid_y }.each do |target|
-                div Target, HiddenTarget, (target.hitting_game_player.try(&.player_color_class) if target.hitting_game_player_id), HitTargetController, HitTargetController.visible_at_value(game_player.target_visible_at(target).to_unix_ms.to_s), (HitTargetController.visible_until_value(game_player.target_visible_until(target).to_unix_ms.to_s) if target.hit_at_ms) do
-                  target
+                unless (hit_at_ms = target.hit_at_ms) && (hit_at_ms + 500) < now
+                  div Target, HiddenTarget, (target.hitting_game_player.try(&.player_color_class) if target.hitting_game_player_id), HitTargetController, HitTargetController.visible_at_value(game_player.target_visible_at(target).to_unix_ms.to_s), (HitTargetController.visible_until_value(game_player.target_visible_until(target).to_unix_ms.to_s) if target.hit_at_ms) do
+                    target
+                  end
                 end
               end
             end
