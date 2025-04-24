@@ -7,7 +7,7 @@ class GamePlayer < ApplicationRecord
   column session_id : String
   column score : Int32 = 0
   # TODO: Bug in orma forces us to silently leave this column in
-  # deprecated_column last_connection_check_at : Time?
+  column last_connection_check_at : Time?
 
   has_many_of GamePlayerTimeSync
 
