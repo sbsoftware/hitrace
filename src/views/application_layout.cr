@@ -97,6 +97,14 @@ class ApplicationLayout < ToHtml::Layout
   append_to_head GamePlayer::TimeSyncTemplate::Style
   append_to_head GameScoreboardView::Style
 
+  class AdsByGoogle
+    ToHtml.class_template do
+      script async: true, src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5259491325832394", crossorigin: "anonymous"
+    end
+  end
+
+  append_to_head AdsByGoogle
+
   ToHtml.instance_template do
     super do
       h1(SiteHeading) do
