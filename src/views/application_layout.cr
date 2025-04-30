@@ -22,6 +22,8 @@ class ApplicationLayout < ToHtml::Layout
   css_class SiteHeading
   css_class SiteHeadingBegin
   css_class SiteHeadingEnd
+  css_class ContentLayout
+  css_class MainContent
 
   style do
     comment "License: https://hitrace.fun#{OutfitLicense.uri_path}"
@@ -76,6 +78,11 @@ class ApplicationLayout < ToHtml::Layout
       prop("background-clip", "text")
       color "transparent"
     end
+
+    rule ContentLayout do
+      display Flex
+      justifyContent SpaceBetween
+    end
   end
 
   class JsErrorHandler < JS::Code
@@ -113,7 +120,11 @@ class ApplicationLayout < ToHtml::Layout
           span(SiteHeadingEnd) { "RACE" }
         end
       end
-      yield
+      div ContentLayout do
+        div MainContent do
+          yield
+        end
+      end
     end
   end
 end

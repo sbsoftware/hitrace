@@ -29,10 +29,12 @@ class HomeView
 
     rule HomeViewGrid do
       prop("margin-top", 15.px)
+      display Flex
+      justifyContent Center
     end
 
     rule HomeViewGrid > GameGridView::Grid do
-      prop("transform", "perspective(800px) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-100px, -100px)")
+      prop("transform", "perspective(800px) scale(0.8) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-30px, -60px)")
       prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
     end
 
