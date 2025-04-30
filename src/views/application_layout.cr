@@ -24,6 +24,7 @@ class ApplicationLayout < ToHtml::Layout
   css_class SiteHeadingEnd
   css_class ContentLayout
   css_class MainContent
+  css_class HomePageAd
 
   style do
     comment "License: https://hitrace.fun#{OutfitLicense.uri_path}"
@@ -83,6 +84,12 @@ class ApplicationLayout < ToHtml::Layout
       display Flex
       justifyContent SpaceBetween
     end
+
+    media(maxWidth 800.px) do
+      rule HomePageAd do
+        display None
+      end
+    end
   end
 
   class JsErrorHandler < JS::Code
@@ -123,6 +130,12 @@ class ApplicationLayout < ToHtml::Layout
       div ContentLayout do
         div MainContent do
           yield
+        end
+        div HomePageAd do
+          ins class: "adsbygoogle", style: "display:block", data_ad_client: "ca-pub-5259491325832394", data_ad_slot: "1032697835", data_ad_format: "auto", data_full_width_responsive: "true"
+          script do
+           "(adsbygoogle = window.adsbygoogle || []).push({});"
+          end
         end
       end
     end
