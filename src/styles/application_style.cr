@@ -10,6 +10,7 @@ class ApplicationStyle < CSS::Stylesheet
       padding 15.px
       prop("box-sizing", "border-box")
       prop("word-wrap", "break-word")
+      marginBottom 50.px
     end
 
     rule LegalText >> a do
