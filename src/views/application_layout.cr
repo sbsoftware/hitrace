@@ -42,7 +42,7 @@ class ApplicationLayout < ToHtml::Layout
     end
 
     rule html do
-      height 100.percent
+      minHeight 100.percent
       prop("background", "linear-gradient(180deg, rgba(2,7,13,1) 0%, rgba(20,80,139,1) 35%, rgba(84,60,182,1) 71%, rgba(76,30,119,1) 100%)")
       color White
     end
