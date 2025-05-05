@@ -94,12 +94,16 @@ class ApplicationLayout < ToHtml::Layout
 
   class JsErrorHandler < JS::Code
     def_to_js do
-      self.addEventListener("error", ->(event) {
-        window.alert(event.message)
-      })
-      self.addEventListener("unhandledrejection", ->(event) {
-        window.alert(event.reason)
-      })
+      params = URLSearchParams.new(window.location.search)
+
+      if params.get("debug") == "true"
+        self.addEventListener("error", ->(event) {
+          window.alert(event.message)
+        })
+        self.addEventListener("unhandledrejection", ->(event) {
+          window.alert(event.reason)
+        })
+      end
     end
   end
 
