@@ -1,24 +1,8 @@
 class LegalNoticeView
   include Crumble::ContextView
 
-  css_class LegalNotice
-
-  style do
-    rule LegalNotice do
-      width 750.px
-      maxWidth 100.vw
-      backgroundColor "#DDD"
-      color Black
-      padding 15.px
-    end
-
-    rule LegalNotice >> a do
-      color Black
-    end
-  end
-
   template do
-    div LegalNotice do
+    div ApplicationStyle::LegalText do
       h1 { "Impressum" }
 
       p do
