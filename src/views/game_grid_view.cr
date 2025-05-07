@@ -7,9 +7,11 @@ class GameGridView
   def initialize(@size_x, @size_y, @targets : Array(HitTarget), @game_player : GamePlayer); end
 
   def initialize(@size_x, @size_y)
-    @targets = 2.times.map do
-      FakeTarget.new(rand(1..size_x), rand(1..size_y))
-    end.to_a
+    @targets = Array(FakeTarget).new.tap do |arr|
+      GameService.generate_target_positions(2_u32, @size_x.to_u32, @size_y.to_u32) do |(pos_x, pos_y), i|
+        arr << FakeTarget.new(pos_x.to_i, pos_y.to_i)
+      end
+    end
     @game_player = FakeGamePlayer.new
   end
 
