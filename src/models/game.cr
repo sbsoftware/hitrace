@@ -11,6 +11,7 @@ class Game < ApplicationRecord
   column started_at : Time?
   column room_id : Int64?
   column processing_completed : Bool = false
+  column created_at : Time
 
   has_many_of HitTarget
   has_many_of GamePlayer

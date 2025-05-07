@@ -8,6 +8,9 @@ if ENV.fetch("ORMA_CONTINUOUS_MIGRATION", "").in?(["1", "true"])
   {% end %}
 end
 
+# Data migration
+Game.db.exec("UPDATE games SET created_at=started_at WHERE created_at IS NULL;")
+
 spawn do
   loop do
     WaitingPlayer.all.each do |waiting_player|
@@ -49,9 +52,15 @@ spawn do
     end
 
     Game.where({"processing_completed" => false}).find_each do |game|
-      if !game.started? && game.game_players.all?(&.ready?)
-        now = Time.utc
-        game.update(started_at: now.shift(nanoseconds: 1000000000 - now.nanosecond))
+      if !game.started?
+        if game.game_players.all?(&.ready?)
+          now = Time.utc
+          # Shift to the next full second because decimal seconds are stripped by the DB currently
+          game.update(started_at: now.shift(nanoseconds: 1000000000 - now.nanosecond))
+        elsif game.created_at < 30.seconds.ago
+          # Mark game as finished immediately
+          game.update(started_at: game.created_at)
+        end
 
         game.game_players.each do |game_player|
           Crumble::Turbo::ModelTemplateRefreshService.notify(game_player.game_view)

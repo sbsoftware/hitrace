@@ -21,6 +21,8 @@ class GameSummaryView
 
       if winner
         h1 { "#{winner.player_name} has won!" }
+      else
+        h1 { "The game has been aborted!" }
       end
 
       game.leaderboard
