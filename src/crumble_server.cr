@@ -70,9 +70,7 @@ spawn do
       if game.finished?
         game_players = game.game_players.to_a
         if game.room_id.nil? && game_players.size == 2
-          winner = game_players.max_by(&.score.value)
-
-          unless game_players.select { |gp| gp.score == winner.score }.size > 1
+          if winner = game.winner
             if entry = LeaderboardEntry.where({"session_id" => winner.session_id}).first?
               entry.update(games_won: entry.games_won.value + 1)
             else

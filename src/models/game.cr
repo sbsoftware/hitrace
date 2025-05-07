@@ -32,6 +32,16 @@ class Game < ApplicationRecord
     started_at.try(&.<=(GAME_DURATION.ago)) || false
   end
 
+  def winner : GamePlayer?
+    return unless finished?
+    return if game_players.all?(&.score.value.zero?)
+
+    max_score_player = game_players.max_by(&.score.value)
+    return unless max_score_player
+
+    max_score_player if game_players.select(&.score.==(max_score_player.score)).size == 1
+  end
+
   model_template :leaderboard do
     GameScoreboardView.new(game: model)
   end

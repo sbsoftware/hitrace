@@ -15,11 +15,7 @@ class GameSummaryView
 
   ToHtml.instance_template do
     div GameSummary do
-      div style: "display: none;" do
-        winner = game.game_players.max_by { |gp| gp.score.value }
-      end
-
-      if winner
+      if winner = game.winner
         h1 { "#{winner.player_name} has won!" }
       elsif game.game_players.any? { |gp| gp.score > 0 }
         h1 { "Draw!" }
