@@ -70,12 +70,14 @@ class GameGridView
     end
 
     rule Cell do
+      position Relative
       width 20.percent
       height 100.percent
       border 1.px, Solid, White
     end
 
     rule Target do
+      position Absolute
       width 100.percent
       height 100.percent
       backgroundColor "#32CD32"
