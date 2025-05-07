@@ -19,6 +19,7 @@ RubikSprayPaintLicense = TXTFile.register "assets/fonts/RubikSprayPaint/OFL.txt"
 class ApplicationLayout < ToHtml::Layout
   include Crumble::ContextView
 
+  css_class TopMenu
   css_class SiteHeading
   css_class SiteHeadingBegin
   css_class SiteHeadingEnd
@@ -57,6 +58,13 @@ class ApplicationLayout < ToHtml::Layout
 
     rule a do
       color White
+    end
+
+    rule TopMenu do
+      position Absolute
+      top 0
+      prop("right", "0")
+      padding 10.px
     end
 
     rule SiteHeading do
@@ -125,6 +133,12 @@ class ApplicationLayout < ToHtml::Layout
 
   ToHtml.instance_template do
     super do
+      div TopMenu do
+        a href: "https://discord.gg/2cbStUzb", target: "_blank" do
+          "Join our Discord"
+        end
+      end
+
       h1(SiteHeading) do
         a HomeResource do
           span(SiteHeadingBegin) { "HIT" }
