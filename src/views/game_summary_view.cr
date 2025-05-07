@@ -21,6 +21,8 @@ class GameSummaryView
 
       if winner
         h1 { "#{winner.player_name} has won!" }
+      elsif game.game_players.any? { |gp| gp.score > 0 }
+        h1 { "Draw!" }
       else
         h1 { "The game has been aborted!" }
       end
