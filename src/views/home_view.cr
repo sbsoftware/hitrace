@@ -34,15 +34,8 @@ class HomeView
     end
 
     rule HomeViewGrid > GameGridView::Grid do
-      prop("transform", "perspective(800px) scale(0.8) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(-30px, -60px)")
+      prop("transform", "perspective(800px) scale(0.6) translate(0, -120px) rotateX(35deg) rotateZ(28deg) rotateY(-15deg) translate(-40px, -60px)")
       prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
-    end
-
-    media(maxWidth 500.px) do
-      rule HomeViewGrid > GameGridView::Grid do
-        maxWidth 80.percent
-        prop("transform", "perspective(800px) rotateX(45deg) rotateZ(30deg) rotateY(-15deg) translate(10%, -20%)")
-      end
     end
   end
 
