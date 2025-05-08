@@ -68,7 +68,7 @@ class ApplicationLayout < ToHtml::Layout
     end
 
     rule SiteHeading do
-      fontSize "50pt"
+      fontSize "40pt"
       fontFamily "Rubik Spray Paint"
       fontWeight Normal
     end
