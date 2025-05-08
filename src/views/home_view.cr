@@ -7,6 +7,8 @@ class HomeView
   css_class TopContainer
   css_class TopBox
   css_class HomeViewGrid
+  css_class PlayButtonContainer
+  css_class GameHint
 
   style do
     rule TopContainer do
@@ -25,6 +27,18 @@ class HomeView
       width 80.percent
       padding 5.px
       marginTop 10.px
+    end
+
+    rule PlayButtonContainer do
+      display Flex
+      justifyContent SpaceBetween
+      prop("gap", 20.px)
+    end
+
+    rule GameHint do
+      padding 0, 5.px
+      display Flex
+      alignItems Center
     end
 
     rule HomeViewGrid do
@@ -47,7 +61,12 @@ class HomeView
       div TopBox do
         SetNameAction::Template.new(ctx.session)
 
-        PlayButtonView.new(ctx: ctx)
+        div PlayButtonContainer do
+          span GameHint do
+            "Hit the target tiles faster than your opponent!"
+          end
+          PlayButtonView.new(ctx: ctx)
+        end
       end
     end
 
