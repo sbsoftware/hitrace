@@ -117,6 +117,14 @@ class ApplicationLayout < ToHtml::Layout
 
   prepend_to_head JsErrorHandler
 
+  class ES5Shim
+    ToHtml.class_template do
+      script src: "https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.15/es5-shim.min.js"
+    end
+  end
+
+  prepend_to_head ES5Shim
+
   append_to_head Style, ApplicationStyle, HomeView::Style, LegalMenuView::Style, PlayButtonView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
   append_to_head GamePlayer::Style
   append_to_head Orma::Record::HealthCheckActionTemplate::Style
