@@ -117,13 +117,14 @@ class ApplicationLayout < ToHtml::Layout
 
   prepend_to_head JsErrorHandler
 
-  class ES5Shim
+  class ESShim
     ToHtml.class_template do
       script src: "https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.15/es5-shim.min.js"
+      script src: "https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.8/es6-shim.min.js"
     end
   end
 
-  prepend_to_head ES5Shim
+  prepend_to_head ESShim
 
   append_to_head Style, ApplicationStyle, HomeView::Style, LegalMenuView::Style, PlayButtonView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
   append_to_head GamePlayer::Style
