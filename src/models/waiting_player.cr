@@ -15,11 +15,11 @@ class WaitingPlayer < ApplicationRecord
 
   health_check_action :connection_check, 2.seconds, spinner do
     def waiting_player
-      WaitingPlayer.where({"id" => model_id}).first?
+      WaitingPlayer.where(id: model_id).first?
     end
 
     controller do
-      if game_player = GamePlayer.where({"session_id" => ctx.session.id.to_s}).find { |gp| !gp.game.finished? }
+      if game_player = GamePlayer.where(session_id: ctx.session.id.to_s).find { |gp| !gp.game.finished? }
         ctx.response.status_code = 303
         ctx.response.headers["Location"] = GameResource.uri_path(game_player.game_id)
         return

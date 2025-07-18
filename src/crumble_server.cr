@@ -62,7 +62,7 @@ spawn do
       room.save
     end
 
-    Game.where({"processing_completed" => false}).find_each do |game|
+    Game.where(processing_completed: false).find_each do |game|
       if !game.started?
         if game.game_players.all?(&.ready?)
           now = Time.utc
@@ -82,7 +82,7 @@ spawn do
         game_players = game.game_players.to_a
         if game.room_id.nil? && game_players.size == 2
           if winner = game.winner
-            if entry = LeaderboardEntry.where({"session_id" => winner.session_id}).first?
+            if entry = LeaderboardEntry.where(session_id: winner.session_id).first?
               entry.update(games_won: entry.games_won.value + 1)
             else
               LeaderboardEntry.create(session_id: winner.session_id, player_name: winner.player_name, games_won: 1_i64)

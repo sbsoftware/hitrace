@@ -3,7 +3,7 @@ class GameService
     return if waiting_players.any? do |waiting_player|
       next true unless waiting_player.online?
 
-      GamePlayer.where({"session_id" => waiting_player.session_id}).any? do |game_player|
+      GamePlayer.where(session_id: waiting_player.session_id).any? do |game_player|
         !game_player.game.finished?
       end
     end
