@@ -8,9 +8,6 @@ if ENV.fetch("ORMA_CONTINUOUS_MIGRATION", "").in?(["1", "true"])
   {% end %}
 end
 
-# Data migration
-Game.db.exec("UPDATE games SET created_at=started_at WHERE created_at IS NULL;")
-
 spawn do
   loop do
     WaitingPlayer.all.each do |waiting_player|
