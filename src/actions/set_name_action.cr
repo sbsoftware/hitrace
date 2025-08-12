@@ -22,7 +22,6 @@ class SetNameAction < Crumble::Turbo::Action
 
     Template.new(ctx.session).turbo_stream.to_html(ctx.response)
     PlayButtonView.new(ctx: ctx).turbo_stream.to_html(ctx.response)
-    RoomListView.new(ctx: ctx).turbo_stream.to_html(ctx.response)
   end
 
   class Template
