@@ -59,7 +59,7 @@ end
 spawn do
   loop do
     WaitingPlayer.all.each do |waiting_player|
-      if waiting_player.created_at < 10.seconds.ago
+      if waiting_player.created_at < 20.seconds.ago
         waiting_player.destroy unless waiting_player.online?
       end
     end
