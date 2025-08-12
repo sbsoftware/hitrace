@@ -16,8 +16,8 @@ class RoomResource < ApplicationResource
     end
 
 
-    if (room_id = room.id) && (player_name = ctx.session.player_name)
-      RoomPlayer.create(room_id: room_id, player_name: player_name, session_id: ctx.session.id.to_s)
+    if (room_id = room.id) && (user_id = ctx.session.user_id)
+      RoomPlayer.create(room_id: room_id, user_id: user_id)
     end
 
     redirect RoomResource.uri_path(room.id)

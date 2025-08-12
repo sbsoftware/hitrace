@@ -2,8 +2,9 @@ require "./application_record"
 
 class RoomPlayer < ApplicationRecord
   column room_id : Int64
-  column player_name : String
-  column session_id : String
+  deprecated_column player_name : String?
+  deprecated_column session_id : String?
+  column user_id : Int64
   column ready : Bool = false
   column last_connection_check_at : Time?
 
@@ -14,7 +15,7 @@ class RoomPlayer < ApplicationRecord
   health_check_action :connection_check, 5.seconds, room.player_list do
     def model_action_controller
       return unless model
-      return unless model.session_id == ctx.session.id.to_s
+      return unless model.user_id == ctx.session.user_id
 
       model.last_connection_check_at = Time.utc
       model.save

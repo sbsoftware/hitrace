@@ -1,5 +1,6 @@
 module Crumble::Server
   class Session
-    property player_name : String?
+    getter player_name : String?
+    property user_id : Int64?
   end
 end

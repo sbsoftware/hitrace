@@ -42,9 +42,9 @@ class Room < ApplicationRecord
     def model_action_controller
       return unless model
 
-      unless player = model.room_players.any? { |rp| rp.session_id == ctx.session.id.to_s }
-        if (room_id = model.id) && model.game_id.nil? && (player_name = ctx.session.player_name)
-          player = RoomPlayer.create(room_id: room_id, player_name: player_name, session_id: ctx.session.id.to_s)
+      unless player = model.room_players.any? { |rp| rp.user_id == ctx.session.user_id }
+        if (room_id = model.id) && model.game_id.nil? && (user_id = ctx.session.user_id)
+          player = RoomPlayer.create(room_id: room_id, user_id: user_id)
         end
       end
 
@@ -59,7 +59,7 @@ class Room < ApplicationRecord
     def model_action_controller
       return unless model
 
-      if room_player = model.room_players.find { |rp| rp.session_id == ctx.session.id.to_s }
+      if room_player = model.room_players.find { |rp| rp.user_id == ctx.session.user_id }
         room_player.ready = true
         room_player.save
       end

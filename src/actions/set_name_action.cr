@@ -5,20 +5,19 @@ class SetNameAction < Crumble::Turbo::Action
     "set_name"
   end
 
+  class Form < Crumble::Form
+    field name : String
+  end
+
   def controller
     return unless body = ctx.request.body
 
-    name = nil
-    HTTP::Params.parse(body.gets_to_end) do |key, value|
-      case key
-      when NAME_ATTR
-        name = value
-      end
-    end
+    form = Form.from_www_form(body.gets_to_end)
 
-    return unless name
+    # TODO: Move size validation into form as soon as possible
+    return unless form.valid? && (name = form.name) && name.size > 0
 
-    ctx.session.update!(player_name: name)
+    ctx.session.ensure_user.update(**form.values)
 
     Template.new(ctx.session).turbo_stream.to_html(ctx.response)
     PlayButtonView.new(ctx: ctx).turbo_stream.to_html(ctx.response)
@@ -38,7 +37,7 @@ class SetNameAction < Crumble::Turbo::Action
     end
 
     ToHtml.instance_template do
-      unless session.player_name
+      unless (user = session.user) && user.name
         div do
           form action: SetNameAction.uri_path, method: "POST" do
             input type: :text, name: NAME_ATTR, placeholder: "Player Name"

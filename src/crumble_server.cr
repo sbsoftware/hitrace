@@ -1,5 +1,39 @@
 require "./environment"
 
+# Data migration v13
+LeaderboardEntry.all.each do |leaderboard_entry|
+  next unless session_id = leaderboard_entry.session_id
+  next if leaderboard_entry.user_id
+
+  session_store = Crumble::Server::RequestContext.session_store
+  session = Crumble::Server::SessionDecorator.new(session_store, session_store[Crumble::Server::SessionKey.new(UUID.new(session_id.value))])
+
+  if name = leaderboard_entry.player_name.try(&.value)
+    while User.where(name: name).first?
+      name = "#{name} (2)"
+    end
+    user = session.ensure_user
+    user.update(name: name)
+    leaderboard_entry.update(user_id: user.id)
+  end
+end
+GamePlayer.all.each do |game_player|
+  next unless session_id = game_player.session_id
+  next if game_player.user_id
+
+  session_store = Crumble::Server::RequestContext.session_store
+  session = Crumble::Server::SessionDecorator.new(session_store, session_store[Crumble::Server::SessionKey.new(UUID.new(session_id.value))])
+
+  if name = game_player.player_name.try(&.value)
+    while User.where(name: name).first?
+      name = "#{name} (2)"
+    end
+    user = session.ensure_user
+    user.update(name: name)
+    game_player.update(user_id: user.id)
+  end
+end
+
 # Empty service worker for now
 register_service_worker
 
@@ -54,7 +88,7 @@ spawn do
       game = Game.create(room_id: room.id)
 
       room.room_players.each do |room_player|
-        GamePlayer.create(game_id: game.id, session_id: room_player.session_id, player_name: room_player.player_name)
+        GamePlayer.create(game_id: game.id, user_id: room_player.user_id)
       end
 
       room.game_id = game.id
@@ -82,10 +116,10 @@ spawn do
         game_players = game.game_players.to_a
         if game.room_id.nil? && game_players.size == 2
           if winner = game.winner
-            if entry = LeaderboardEntry.where(session_id: winner.session_id).first?
+            if entry = LeaderboardEntry.where(user_id: winner.user_id).first?
               entry.update(games_won: entry.games_won.value + 1)
             else
-              LeaderboardEntry.create(session_id: winner.session_id, player_name: winner.player_name, games_won: 1_i64)
+              LeaderboardEntry.create(user_id: winner.user_id, games_won: 1_i64)
             end
           end
         elsif (room = game.room) && room.game_id == game.id

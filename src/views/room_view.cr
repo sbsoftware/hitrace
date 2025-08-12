@@ -11,7 +11,7 @@ class RoomView
     h1 { room.name }
 
     div do
-      room.room_players.find { |rp| rp.session_id == ctx.session.id.to_s }.try(&.connection_check_action_template)
+      room.room_players.find { |rp| rp.user_id == ctx.session.user_id }.try(&.connection_check_action_template)
 
       room.set_ready_action_template.to_html do
         button { "Ready!" }

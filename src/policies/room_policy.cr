@@ -9,7 +9,7 @@ class RoomPolicy
 
   def show?(room)
     room.room_players.any? do |room_player|
-      room_player.session_id == session.id.to_s
+      room_player.user_id == session.user_id
     end
   end
 end

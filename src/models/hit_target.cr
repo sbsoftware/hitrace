@@ -21,7 +21,7 @@ class HitTarget < ApplicationRecord
 
     def game_player
       @game_player ||= model.game.game_players.find! do |gp|
-        gp.session_id == ctx.session.id.to_s
+        gp.user_id == ctx.session.user_id
       end
     end
 

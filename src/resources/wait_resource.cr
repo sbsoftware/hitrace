@@ -1,6 +1,8 @@
 class WaitResource < ApplicationResource
   def index
-    unless player = WaitingPlayer.where(session_id: ctx.session.id.to_s).first?
+    return unless user = ctx.session.user
+
+    unless player = user.waiting_player
       redirect HomeResource.uri_path
       return
     end
@@ -9,13 +11,10 @@ class WaitResource < ApplicationResource
   end
 
   def create
-    unless player_name = ctx.session.player_name
-      redirect HomeResource.uri_path
-      return
-    end
+    user = ctx.session.ensure_user
 
-    unless WaitingPlayer.where(session_id: ctx.session.id.to_s).first?
-      WaitingPlayer.create(session_id: ctx.session.id.to_s, player_name: player_name)
+    unless user.waiting_player
+      WaitingPlayer.create(user_id: user.id)
     end
 
     redirect WaitResource.uri_path

@@ -3,8 +3,10 @@ require "./game_player_time_sync"
 
 class GamePlayer < ApplicationRecord
   column game_id : Int64
-  column player_name : String
-  column session_id : String
+  deprecated_column player_name : String?
+  deprecated_column session_id : String?
+  # TODO: Make non-nilable after data migration v13
+  column user_id : Int64?
   column score : Int32 = 0
   # Not needed anymore - remove entirely after next release
   deprecated_column last_connection_check_at : Time?
