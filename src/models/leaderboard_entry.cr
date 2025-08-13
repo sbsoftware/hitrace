@@ -1,8 +1,7 @@
 require "./application_record"
 
 class LeaderboardEntry < ApplicationRecord
-  # TODO: Make non-nilable after data migration v13
-  column user_id : Int64?
+  column user_id : Int64
   column games_won : Int64
   column created_at : Time
   column updated_at : Time

@@ -3,8 +3,7 @@ require "./game_player_time_sync"
 
 class GamePlayer < ApplicationRecord
   column game_id : Int64
-  # TODO: Make non-nilable after data migration v13
-  column user_id : Int64?
+  column user_id : Int64
   column score : Int32 = 0
 
   has_many_of GamePlayerTimeSync
