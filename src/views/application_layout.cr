@@ -117,7 +117,7 @@ class ApplicationLayout < ToHtml::Layout
 
   prepend_to_head JsErrorHandler
 
-  append_to_head Style, ApplicationStyle, HomeView::Style, LegalMenuView::Style, PlayButtonView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
+  append_to_head Style, ApplicationStyle, HomeView::Style, LegalMenuView::Style, GameButton::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
   append_to_head GamePlayer::Style
   append_to_head GameScoreboardView::Style
 
