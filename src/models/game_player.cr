@@ -8,15 +8,19 @@ class GamePlayer < ApplicationRecord
 
   has_many_of GamePlayerTimeSync
 
-  @game : Game?
-  @sync_delays : Array(Int64)?
-
-  def game
-    @game ||= Game.find(game_id)
+  getter game : Game do
+    Game.find(game_id)
   end
 
   getter user : User do
     User.find(user_id)
+  end
+
+  getter sync_delays : Array(Int64) do
+    game_player_time_syncs.to_a.reduce([] of Int64) do |memo, time_sync|
+      memo << (time_sync.server_time_ms.value - time_sync.client_time_ms.value)
+      memo
+    end
   end
 
   def player_name
@@ -25,13 +29,6 @@ class GamePlayer < ApplicationRecord
 
   def ready?
     game_player_time_syncs.count >= 5
-  end
-
-  def sync_delays
-    @sync_delays ||= game_player_time_syncs.to_a.reduce([] of Int64) do |memo, time_sync|
-      memo << (time_sync.server_time_ms.value - time_sync.client_time_ms.value)
-      memo
-    end
   end
 
   def delay_ms : Int64
