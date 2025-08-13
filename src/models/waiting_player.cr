@@ -1,6 +1,4 @@
 class WaitingPlayer < ApplicationRecord
-  deprecated_column session_id : String?
-  deprecated_column player_name : String?
   column user_id : Int64
   column last_connection_check_at : Time?
   column created_at : Time

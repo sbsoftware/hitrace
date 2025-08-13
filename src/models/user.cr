@@ -3,6 +3,10 @@ class User < ApplicationRecord
   column created_at : Time
   column updated_at : Time
 
+  def display_name
+    name || "Anonymous"
+  end
+
   def waiting_player : WaitingPlayer?
     WaitingPlayer.where(user_id: id).first?
   end

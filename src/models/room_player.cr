@@ -2,14 +2,20 @@ require "./application_record"
 
 class RoomPlayer < ApplicationRecord
   column room_id : Int64
-  deprecated_column player_name : String?
-  deprecated_column session_id : String?
   column user_id : Int64
   column ready : Bool = false
   column last_connection_check_at : Time?
 
   def room
     Room.find(room_id)
+  end
+
+  getter user : User do
+    User.find(user_id)
+  end
+
+  def player_name
+    user.display_name
   end
 
   health_check_action :connection_check, 5.seconds, room.player_list do
