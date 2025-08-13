@@ -1,13 +1,5 @@
 class PlayButtonView
-  include Crumble::ContextView
-  include IdentifiableView
-
-  element_id PlayButtonViewId
   css_class PlayButton
-
-  def dom_id
-    PlayButtonViewId
-  end
 
   style do
     rule PlayButton >> button do
@@ -23,12 +15,10 @@ class PlayButtonView
     end
   end
 
-  template do
-    if (user = ctx.session.user) && user.name.try(&.size.>(0))
-      div PlayButton do
-        form action: WaitResource.uri_path, method: "POST" do
-          button { "Play" }
-        end
+  ToHtml.class_template do
+    div PlayButton do
+      form action: WaitResource.uri_path, method: "POST" do
+        button { "Play" }
       end
     end
   end

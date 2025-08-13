@@ -15,7 +15,7 @@ class SetNameAction < Crumble::Turbo::Action
 
     ctx.session.ensure_user.update(**form.values)
 
-    PlayButtonView.new(ctx: ctx).turbo_stream.to_html(ctx.response)
+    Template.new(ctx.session).turbo_stream.to_html(ctx.response)
   end
 
   view do

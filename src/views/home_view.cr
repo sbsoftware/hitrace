@@ -65,7 +65,7 @@ class HomeView
           span GameHint do
             "Hit the target tiles faster than your opponent!"
           end
-          PlayButtonView.new(ctx: ctx)
+          PlayButtonView
         end
       end
     end
