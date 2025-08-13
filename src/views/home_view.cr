@@ -74,8 +74,6 @@ class HomeView
       GameGridView.new(ctx: ctx, size_x: 5, size_y: 5)
     end
 
-    # RoomListView.new(ctx: ctx)
-
     LegalMenuView
   end
 end
