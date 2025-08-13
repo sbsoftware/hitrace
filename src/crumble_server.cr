@@ -1,39 +1,5 @@
 require "./environment"
 
-# Data migration v13
-LeaderboardEntry.all.each do |leaderboard_entry|
-  next unless session_id = leaderboard_entry.session_id
-  next if leaderboard_entry.user_id
-
-  session_store = Crumble::Server::RequestContext.session_store
-  session = Crumble::Server::SessionDecorator.new(session_store, session_store[Crumble::Server::SessionKey.new(UUID.new(session_id.value))])
-
-  if name = leaderboard_entry.player_name.try(&.value)
-    while User.where(name: name).first?
-      name = "#{name} (2)"
-    end
-    user = session.ensure_user
-    user.update(name: name)
-    leaderboard_entry.update(user_id: user.id)
-  end
-end
-GamePlayer.all.each do |game_player|
-  next unless session_id = game_player.session_id
-  next if game_player.user_id
-
-  session_store = Crumble::Server::RequestContext.session_store
-  session = Crumble::Server::SessionDecorator.new(session_store, session_store[Crumble::Server::SessionKey.new(UUID.new(session_id.value))])
-
-  if name = game_player.player_name.try(&.value)
-    while User.where(name: name).first?
-      name = "#{name} (2)"
-    end
-    user = session.ensure_user
-    user.update(name: name)
-    game_player.update(user_id: user.id)
-  end
-end
-
 # Empty service worker for now
 register_service_worker
 
