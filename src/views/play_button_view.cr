@@ -24,7 +24,7 @@ class PlayButtonView
   end
 
   template do
-    if ctx.session.player_name
+    if (user = ctx.session.user) && user.name.try(&.size.>(0))
       div PlayButton do
         form action: WaitResource.uri_path, method: "POST" do
           button { "Play" }

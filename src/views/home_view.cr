@@ -59,7 +59,7 @@ class HomeView
         LeaderboardView.new(ctx: ctx)
       end
       div TopBox do
-        SetNameAction::Template.new(ctx.session)
+        SetNameAction.new(ctx).action_template
 
         div PlayButtonContainer do
           span GameHint do
