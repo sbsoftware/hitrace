@@ -14,9 +14,7 @@ class RoomListView
         Room.where({"game_id" => nil}).each do |room|
           li do
             "#{room.name} (#{room.room_players.count})"
-            room.join_action_template.to_html do
-              button { "Join" }
-            end
+            room.join_action_template(ctx).to_html
           end
         end
       end

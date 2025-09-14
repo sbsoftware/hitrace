@@ -19,7 +19,7 @@ class RoomPlayer < ApplicationRecord
   end
 
   health_check_action :connection_check, 5.seconds, room.player_list do
-    def model_action_controller
+    controller do
       return unless model
       return unless model.user_id == ctx.session.user_id
 

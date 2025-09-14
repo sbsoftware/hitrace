@@ -39,7 +39,7 @@ class Room < ApplicationRecord
   end
 
   model_action :join, player_list do
-    def model_action_controller
+    controller do
       return unless model
 
       unless player = model.room_players.any? { |rp| rp.user_id == ctx.session.user_id }
@@ -50,13 +50,20 @@ class Room < ApplicationRecord
 
       if player
         ctx.response.status_code = 303
-        ctx.response.headers["Location"] = RoomResource.uri_path(model_id)
+        ctx.response.headers["Location"] = RoomResource.uri_path(model.id)
+      end
+    end
+
+    view do
+      # TODO: This probably needs a button
+      template do
+        action_form.to_html { nil }
       end
     end
   end
 
   model_action :set_ready, player_list do
-    def model_action_controller
+    controller do
       return unless model
 
       if room_player = model.room_players.find { |rp| rp.user_id == ctx.session.user_id }
@@ -65,6 +72,14 @@ class Room < ApplicationRecord
       end
 
       model_template.turbo_stream.to_html(ctx.response)
+    end
+
+    view do
+      template do
+        action_form.to_html do
+          button { "Ready!" }
+        end
+      end
     end
   end
 end
