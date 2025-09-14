@@ -102,47 +102,15 @@ class GamePlayer < ApplicationRecord
     targets :submit, :time
 
     js_method :connect do
-      this.timeTarget.value = Date.now._call
-      this.submitTarget.click._call
-
       that = this
-      [200, 400, 600, 800].forEach do |delay|
-        setTimeout(-> {
-          that.timeTarget.value = Date.now._call
-          that.submitTarget.click._call
-        }, delay)
-      end
-    end
-  end
-
-  class TimeSyncTemplate
-    getter action_path : String
-
-    def initialize(@action_path); end
-
-    css_class Form
-
-    style do
-      rule Form do
-        display None
-      end
-    end
-
-    ToHtml.instance_template do
-      div TimeSyncController do
-        form Form, action: action_path, method: "POST" do
-          input TimeSyncController.time_target, type: :hidden, name: "time", value: "0"
-          input TimeSyncController.submit_target, type: :submit, name: "submit"
-        end
-      end
+      setTimeout(-> {
+        that.timeTarget.value = Date.now._call
+        that.submitTarget.click._call
+      }, 150)
     end
   end
 
   model_action :time_sync, game_view do
-    def self.action_template(model)
-      TimeSyncTemplate.new(self.uri_path(model.id))
-    end
-
     controller do
       return unless body = ctx.request.body
 
@@ -157,6 +125,19 @@ class GamePlayer < ApplicationRecord
       return unless time
 
       GamePlayerTimeSync.create(game_player_id: model.id, client_time_ms: time, server_time_ms: Time.utc.to_unix_ms)
+    end
+
+    view do
+      template do
+        if model.game_player_time_syncs.count < 5
+          div TimeSyncController do
+            action_form(hidden: true).to_html do
+              input TimeSyncController.time_target, type: :hidden, name: "time", value: "0"
+              input TimeSyncController.submit_target, type: :submit, name: "submit"
+            end
+          end
+        end
+      end
     end
   end
 end

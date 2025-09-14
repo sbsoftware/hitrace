@@ -119,7 +119,6 @@ class ApplicationLayout < ToHtml::Layout
 
   append_to_head Style, ApplicationStyle, HomeView::Style, LegalMenuView::Style, PlayButtonView::Style, LeaderboardView::Style, GameGridView::Style, GameSummaryView::Style
   append_to_head GamePlayer::Style
-  append_to_head GamePlayer::TimeSyncTemplate::Style
   append_to_head GameScoreboardView::Style
 
   class AdsByGoogle
