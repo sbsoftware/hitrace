@@ -66,6 +66,7 @@ class HomeView
             "Hit the target tiles faster than your opponent!"
           end
           PlayButtonView
+          CreateRoomAction.new(ctx).action_template
         end
       end
     end
