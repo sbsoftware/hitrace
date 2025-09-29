@@ -78,19 +78,20 @@ class GamePlayer < ApplicationRecord
         end
       elsif game.running?
         div do
-          game.leaderboard
+          game.leaderboard.renderer(ctx)
         end
         div do
-          grid
+          grid.renderer(ctx)
         end
       elsif game.finished?
-        GameSummaryView.new(model.game)
+        GameSummaryView.new(ctx: ctx, game: model.game)
       end
     end
   end
 
   model_template :grid do
     GameGridView.new(
+      ctx: ctx,
       size_x: game.size_x.value,
       size_y: game.size_y.value,
       targets: game.hit_targets.to_a,

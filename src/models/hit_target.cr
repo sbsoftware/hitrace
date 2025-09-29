@@ -25,7 +25,7 @@ class HitTarget < ApplicationRecord
       end
     end
 
-    def model_template : IdentifiableView
+    def model_template
       game_player.grid
     end
 
@@ -40,16 +40,15 @@ class HitTarget < ApplicationRecord
       end
       # TODO: Transaction End
 
-      model_template.turbo_stream.to_html(ctx.response)
       model.game.game_players.each do |game_player|
-        Crumble::Turbo::ModelTemplateRefreshService.notify(game_player.game_view)
+        game_player.game_view.refresh!
       end
     end
-  end
 
-  ToHtml.instance_template do
-    hit_action_template.to_html do
-      nil
+    view do
+      template do
+        custom_action_trigger.to_html { nil }
+      end
     end
   end
 end

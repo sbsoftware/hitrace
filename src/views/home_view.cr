@@ -71,7 +71,7 @@ class HomeView
     end
 
     div HomeViewGrid do
-      GameGridView.new(size_x: 5, size_y: 5)
+      GameGridView.new(ctx: ctx, size_x: 5, size_y: 5)
     end
 
     # RoomListView.new(ctx: ctx)

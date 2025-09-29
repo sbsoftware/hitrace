@@ -74,7 +74,7 @@ spawn do
         end
 
         game.game_players.each do |game_player|
-          Crumble::Turbo::ModelTemplateRefreshService.notify(game_player.game_view)
+          game_player.game_view.refresh!
         end
       end
 
@@ -95,7 +95,7 @@ spawn do
         game.update(processing_completed: true)
 
         game.game_players.each do |game_player|
-          Crumble::Turbo::ModelTemplateRefreshService.notify(game_player.game_view)
+          game_player.game_view.refresh!
         end
       end
     end

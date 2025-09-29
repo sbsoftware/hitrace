@@ -1,7 +1,7 @@
 class GameSummaryView
-  getter game : Game
+  include Crumble::ContextView
 
-  def initialize(@game); end
+  getter game : Game
 
   css_class GameSummary
 
@@ -23,7 +23,7 @@ class GameSummaryView
         h1 { "The game has been aborted!" }
       end
 
-      game.leaderboard
+      game.leaderboard.renderer(ctx)
 
       p do
         a HomeResource do

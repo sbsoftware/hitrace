@@ -1,12 +1,14 @@
 class GameGridView
+  include Crumble::ContextView
+
   getter size_x : Int32
   getter size_y : Int32
   getter targets : Array(HitTarget) | Array(FakeTarget)
   getter game_player : GamePlayer | FakeGamePlayer
 
-  def initialize(@size_x, @size_y, @targets : Array(HitTarget), @game_player : GamePlayer); end
+  def initialize(@ctx, @size_x, @size_y, @targets : Array(HitTarget), @game_player : GamePlayer); end
 
-  def initialize(@size_x, @size_y)
+  def initialize(@ctx, @size_x, @size_y)
     @targets = Array(FakeTarget).new.tap do |arr|
       GameService.generate_target_positions(2_u32, @size_x.to_u32, @size_y.to_u32) do |(pos_x, pos_y), i|
         arr << FakeTarget.new(pos_x.to_i, pos_y.to_i)
@@ -36,8 +38,10 @@ class GameGridView
       nil
     end
 
-    ToHtml.instance_template do
-      nil # empty template
+    record FakeHitAction
+
+    def hit_action_template(_ctx)
+      nil
     end
   end
 
@@ -142,7 +146,7 @@ class GameGridView
               targets.select { |t| t.pos_x == grid_x && t.pos_y == grid_y }.each do |target|
                 unless (hit_at_ms = target.hit_at_ms) && (hit_at_ms + 500) < now
                   div Target, HiddenTarget, (target.hitting_game_player.try(&.player_color_class) if target.hitting_game_player_id), HitTargetController, HitTargetController.visible_at_value(game_player.target_visible_at(target).to_unix_ms.to_s), (HitTargetController.visible_until_value(game_player.target_visible_until(target).to_unix_ms.to_s) if target.hit_at_ms) do
-                    target
+                    target.hit_action_template(ctx)
                   end
                 end
               end

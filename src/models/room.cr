@@ -70,8 +70,6 @@ class Room < ApplicationRecord
         room_player.ready = true
         room_player.save
       end
-
-      model_template.turbo_stream.to_html(ctx.response)
     end
 
     view do

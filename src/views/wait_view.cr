@@ -12,6 +12,6 @@ class WaitView
 
     waiting_player.connection_check_action_template(ctx)
 
-    waiting_player.spinner
+    waiting_player.spinner.renderer(ctx)
   end
 end
