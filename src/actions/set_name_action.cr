@@ -14,8 +14,6 @@ class SetNameAction < Crumble::Turbo::Action
     return unless form.valid? && (name = form.name) && name.size > 0
 
     ctx.session.ensure_user.update(**form.values)
-
-    Template.new(ctx.session).turbo_stream.to_html(ctx.response)
   end
 
   view do
