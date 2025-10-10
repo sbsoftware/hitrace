@@ -6,8 +6,8 @@ describe GameGridView do
       Game.continuous_migration!
       game = Game.create(size_x: 2, size_y: 2)
       targets = [] of HitTarget
-      game_player = GamePlayer.new(id: 1_i64, game_id: game.id, player_name: "Tester", session_id: "abcdef12345")
-      view = GameGridView.new(size_x: 2, size_y: 2, targets: targets, game_player: game_player)
+      game_player = GamePlayer.new(id: 1_i64, game_id: game.id, user_id: 1_i64)
+      view = GameGridView.new(ctx: test_handler_context, size_x: 2, size_y: 2, targets: targets, game_player: game_player)
 
       expected = <<-HTML.squish
       <div class="game-grid-view--grid">
@@ -33,13 +33,13 @@ describe GameGridView do
 
       # Nanoseconds are ignored on Sqlite
       game = Game.create(size_x: 2, size_y: 2, started_at: Time.utc(2025, 4, 23, 21, 55, 0, nanosecond: 900000000))
-      game_player = GamePlayer.create(game_id: game.id, player_name: "Tester", session_id: "abcdef12345")
-      other_game_player = GamePlayer.create(game_id: game.id, player_name: "Toster", session_id: "xyzwww12345")
+      game_player = GamePlayer.create(game_id: game.id, user_id: 1_i64)
+      other_game_player = GamePlayer.create(game_id: game.id, user_id: 1_i64)
       targets = [
         HitTarget.new(id: 1_i64, game_id: game.id, pos_x: 1, pos_y: 1, delay_ms: 1000, hit_at_ms: Time.utc(2025, 4, 23, 21, 55, 1, nanosecond: 600000000).to_unix_ms, hitting_game_player_id: game_player.id)
       ]
       GamePlayerTimeSync.create(game_player_id: game_player.id, client_time_ms: Time.utc(2025, 4, 23, 21, 52, 33, nanosecond: 500000000).to_unix_ms, server_time_ms: Time.utc(2025, 4, 23, 21, 52, 33, nanosecond: 600000000).to_unix_ms)
-      view = GameGridView.new(size_x: 2, size_y: 2, targets: targets, game_player: game_player)
+      view = GameGridView.new(ctx: test_handler_context, size_x: 2, size_y: 2, targets: targets, game_player: game_player)
 
       expected = <<-HTML.squish
       <div class="game-grid-view--grid">

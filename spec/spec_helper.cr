@@ -1,6 +1,7 @@
 require "spec"
 File.delete("./test.db")
 require "../src/environment"
+require "crumble/spec/test_handler_context"
 
 {% for orm_class in Orma::Record.all_subclasses %}
   {% if !orm_class.abstract? %}
