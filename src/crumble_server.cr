@@ -77,7 +77,7 @@ spawn do
 
       if game.finished?
         game_players = game.game_players.to_a
-        if game.room_id.nil? && game_players.size == 2
+        if game_players.size == 2
           if winner = game.winner
             if entry = LeaderboardEntry.where(user_id: winner.user_id).first?
               entry.update(games_won: entry.games_won.value + 1)
@@ -85,7 +85,9 @@ spawn do
               LeaderboardEntry.create(user_id: winner.user_id, games_won: 1_i64)
             end
           end
-        elsif (room = game.room) && room.game_id == game.id
+        end
+
+        if (room = game.room) && room.game_id == game.id
           room.reset!
         end
 
