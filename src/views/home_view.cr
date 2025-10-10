@@ -31,6 +31,7 @@ class HomeView
     end
 
     rule PlayButtonContainer do
+      marginTop 20.px
       display Flex
       justifyContent SpaceBetween
       prop("gap", 20.px)
