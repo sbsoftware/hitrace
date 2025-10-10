@@ -4,12 +4,20 @@ class GameSummaryView
   getter game : Game
 
   css_class GameSummary
+  css_class Buttons
 
   style do
     rule GameSummary do
       display Flex
       flexDirection Column
       alignItems Center
+    end
+
+    rule Buttons do
+      display Flex
+      justifyContent Center
+      prop("gap", 20.px)
+      marginTop 20.px
     end
   end
 
@@ -25,20 +33,18 @@ class GameSummaryView
 
       game.leaderboard.renderer(ctx)
 
-      p do
+      div Buttons do
         a HomeResource do
-          "Home"
+          GameButton.to_html { "Home" }
         end
 
         if room_id = game.room_id
-          "&nbsp; | &nbsp;"
-
           a href: RoomResource.uri_path(room_id) do
-            "Back to room"
+            GameButton.to_html { "Back to room" }
           end
         else
           form action: WaitResource.uri_path, method: "POST" do
-            button { "Play again" }
+            GameButton.to_html { "Play again" }
           end
         end
       end

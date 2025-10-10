@@ -2,8 +2,8 @@ class CreateRoomAction < Crumble::Turbo::Action
   controller do
     user = ctx.session.ensure_user
 
-    room = Room.create(name: "Private Room")
-    RoomPlayer.create(room_id: room.id, user_id: user.id)
+    room = Room.create(name: "#{user.display_name}'s Room")
+    RoomPlayer.create(room_id: room.id, user_id: user.id, admin: true)
 
     ctx.response.status_code = 303
     ctx.response.headers["Location"] = RoomResource.uri_path(room.id)

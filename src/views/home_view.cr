@@ -9,6 +9,7 @@ class HomeView
   css_class HomeViewGrid
   css_class PlayButtonContainer
   css_class GameHint
+  css_class CreateRoomButtonWrapper
 
   style do
     rule TopContainer do
@@ -33,12 +34,14 @@ class HomeView
       display Flex
       justifyContent SpaceBetween
       prop("gap", 20.px)
+      alignItems Center
     end
 
     rule GameHint do
       padding 0, 5.px
       display Flex
       alignItems Center
+      prop("flex-shrink", 2)
     end
 
     rule HomeViewGrid do
@@ -66,7 +69,9 @@ class HomeView
             "Hit the target tiles faster than your opponent!"
           end
           PlayButtonView
-          CreateRoomAction.new(ctx).action_template
+          span CreateRoomButtonWrapper do
+            CreateRoomAction.new(ctx).action_template
+          end
         end
       end
     end

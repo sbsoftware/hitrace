@@ -1,16 +1,16 @@
 class GameService
-  def self.create_game(waiting_players : Tuple(WaitingPlayer, WaitingPlayer)) : Game?
-    return if waiting_players.any? do |waiting_player|
-      next true unless waiting_player.online?
+  def self.create_game(players : Tuple(WaitingPlayer, WaitingPlayer) | Tuple(RoomPlayer, RoomPlayer), room_id = nil) : Game?
+    return if players.any? do |player|
+      next true unless player.online?
 
-      !waiting_player.user.active_game_player.nil?
+      !player.user.active_game_player.nil?
     end
 
     # TODO: Transaction start
-    game = Game.create
+    game = Game.create(room_id: room_id)
 
-    waiting_players.each do |waiting_player|
-      GamePlayer.create(game_id: game.id, user_id: waiting_player.user_id)
+    players.each do |player|
+      GamePlayer.create(game_id: game.id, user_id: player.user_id)
     end
 
     generate_target_positions(Game::GAME_DURATION.total_seconds.to_u32, game.size_x.value.to_u32, game.size_y.value.to_u32) do |(pos_x, pos_y), i|

@@ -3,6 +3,7 @@ require "./application_record"
 class RoomPlayer < ApplicationRecord
   column room_id : Int64
   column user_id : Int64
+  column admin : Bool = false
   column ready : Bool = false
   column last_connection_check_at : Time?
 

@@ -51,15 +51,12 @@ spawn do
 
       next unless room.ready?
 
-      game = Game.create(room_id: room.id)
-
-      room.room_players.each do |room_player|
-        GamePlayer.create(game_id: game.id, user_id: room_player.user_id)
+      room_players = room.room_players.to_a
+      if game = GameService.create_game({room_players[0], room_players[1]}, room.id)
+        room.game_id = game.id
+        room.last_game_started_at = Time.utc
+        room.save
       end
-
-      room.game_id = game.id
-      room.last_game_started_at = Time.utc
-      room.save
     end
 
     Game.where(processing_completed: false).find_each do |game|
