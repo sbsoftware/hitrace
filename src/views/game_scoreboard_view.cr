@@ -10,34 +10,34 @@ class GameScoreboardView
 
   style do
     rule Scoreboard do
-      display Flex
-      justifyContent SpaceBetween
+      display :flex
+      justify_content :space_between
       width 100.vw
-      maxWidth 500.px
+      max_width 500.px
     end
 
     rule Player do
-      display Flex
-      justifyContent SpaceBetween
+      display :flex
+      justify_content :space_between
       width 50.percent
       padding 5.px
-      prop("border-radius", "5px 5px 0 0")
+      border_radius 5.px, 5.px, 0, 0
     end
 
-    rule (Player & ":nth-child(1)") >> PlayerName do
-      prop("order", 1)
+    rule (Player && ":nth-child(1)") > PlayerName do
+      order 1
     end
 
-    rule (Player & ":nth-child(1)") >> PlayerScore do
-      prop("order", 2)
+    rule (Player && ":nth-child(1)") > PlayerScore do
+      order 2
     end
 
-    rule (Player & ":nth-child(2)") >> PlayerName do
-      prop("order", 2)
+    rule (Player && ":nth-child(2)") > PlayerName do
+      order 2
     end
 
-    rule (Player & ":nth-child(2)") >> PlayerScore do
-      prop("order", 1)
+    rule (Player && ":nth-child(2)") > PlayerScore do
+      order 1
     end
   end
 

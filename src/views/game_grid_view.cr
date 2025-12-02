@@ -64,30 +64,30 @@ class GameGridView
   style do
     rule Grid do
       width 100.vw
-      maxWidth 500.px
-      height "auto"
-      prop("aspect-ratio", "1 / 1")
+      max_width 500.px
+      height :auto
+      aspect_ratio CSS::Ratio.new(1, 1)
     end
 
     rule Row do
-      display Flex
+      display :flex
       width 100.percent
       height 20.percent
     end
 
     rule Cell do
-      position Relative
+      position :relative
       width 20.percent
       height 100.percent
-      border 1.px, Solid, White
+      border 1.px, :solid, :white
     end
 
     rule Target do
-      position Absolute
+      position :absolute
       width 100.percent
       height 100.percent
-      backgroundColor "#32CD32"
-      prop("box-shadow", "0px 0px 20px 10px rgba(0, 255, 0, 0.7)")
+      background_color "#32CD32"
+      box_shadow 0.px, 0.px, 20.px, 10.px, rgb(0, 255, 0, alpha: 70.percent)
     end
 
     rule Target > any do
@@ -95,12 +95,12 @@ class GameGridView
       height 100.percent
     end
 
-    rule Target & ":active" do
-      backgroundColor "#ffa500"
+    rule Target && ":active" do
+      background_color "#ffa500"
     end
 
     rule HiddenTarget do
-      display None
+      display :none
     end
   end
 

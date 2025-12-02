@@ -13,6 +13,9 @@ crystal: '>= 1.14.0'
 license: MIT
 
 dependencies:
+  crumble:
+    github: sbsoftware/crumble
+    version: ">= 0.26.0"
   crumble-turbo:
     github: sbsoftware/crumble-turbo
     version: ">= 0.13.0"

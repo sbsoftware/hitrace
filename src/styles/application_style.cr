@@ -1,20 +1,18 @@
 class ApplicationStyle < CSS::Stylesheet
   css_class LegalText
 
-  rules do
-    rule LegalText do
-      width 750.px
-      maxWidth 100.vw
-      backgroundColor "#DDD"
-      color Black
-      padding 15.px
-      prop("box-sizing", "border-box")
-      prop("word-wrap", "break-word")
-      marginBottom 50.px
-    end
+  rule LegalText do
+    width 750.px
+    max_width 100.vw
+    background_color "#DDD"
+    color :black
+    padding 15.px
+    box_sizing :border_box
+    word_wrap :break_word
+    margin_bottom 50.px
+  end
 
-    rule LegalText >> a do
-      color Black
-    end
+  rule LegalText > a do
+    color :black
   end
 end

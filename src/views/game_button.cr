@@ -3,15 +3,15 @@ class GameButton
 
   style do
     rule GameButton do
-      prop("background", "transparent")
-      color White
-      border 1.px, Solid, White
-      prop("border-radius", 5.px)
-      prop("box-shadow", "0px 0px 2px 1px rgba(0, 255, 0, 0.7)")
+      background :transparent
+      color :white
+      border 1.px, :solid, :white
+      border_radius 5.px
+      box_shadow 0.px, 0.px, 2.px, 1.px, rgb(0, 255, 0, alpha: 70.percent)
       padding 10.px
-      fontSize 18.px
-      fontFamily "Outfit"
-      fontWeight Bold
+      font_size 18.px
+      font_family ApplicationLayout::Style::OutfitFont
+      font_weight :bold
     end
   end
 

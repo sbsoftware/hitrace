@@ -28,74 +28,70 @@ class ApplicationLayout < ToHtml::Layout
   css_class HomePageAd
 
   style do
-    comment "License: https://hitrace.fun#{OutfitLicense.uri_path}"
-    font_face do
-      fontFamily "Outfit"
-      fontStyle Normal
+    comment "License: #{Crumble::Server.host}#{OutfitLicense.uri_path}"
+    font_face OutfitFont, name: "Outfit" do
       src url(OutfitRegular.uri_path)
     end
 
-    comment "License: https://hitrace.fun#{RubikSprayPaintLicense.uri_path}"
-    font_face do
-      fontFamily "Rubik Spray Paint"
-      fontStyle Normal
+    comment "License: #{Crumble::Server.host}#{RubikSprayPaintLicense.uri_path}"
+    font_face RubikSprayPaintFont, name: "Rubik Spray Paint" do
       src url(RubikSprayPaintRegular.uri_path)
     end
 
     rule html do
-      minHeight 100.percent
-      prop("background", "linear-gradient(180deg, rgba(2,7,13,1) 0%, rgba(20,80,139,1) 35%, rgba(84,60,182,1) 71%, rgba(76,30,119,1) 100%)")
-      color White
+      min_height 100.percent
+      property("background", "linear-gradient(180deg, rgba(2,7,13,1) 0%, rgba(20,80,139,1) 35%, rgba(84,60,182,1) 71%, rgba(76,30,119,1) 100%)")
+      color :white
     end
 
     rule body do
-      display Flex
-      justifyContent Center
-      alignItems Center
-      flexDirection Column
-      fontFamily "Outfit, sans-serif"
+      display :flex
+      justify_content :center
+      align_items :center
+      flex_direction :column
+      font_family OutfitFont, :sans_serif
     end
 
     rule a do
-      color White
+      color :white
     end
 
     rule TopMenu do
-      position Absolute
+      position :absolute
       top 0
-      prop("right", "0")
+      right 0
       padding 10.px
     end
 
     rule SiteHeading do
-      fontSize "40pt"
-      fontFamily "Rubik Spray Paint"
-      fontWeight Normal
+      font_size 40.pt
+      font_family RubikSprayPaintFont
+      font_weight :normal
     end
 
-    rule SiteHeading >> a do
-      textDecoration None
+    rule SiteHeading > a do
+      text_decoration :none
     end
 
     rule SiteHeadingBegin do
-      prop("text-shadow", outline_shadow("#8F7", 5))
+      property("text_shadow", outline_shadow("#8F7", 5))
       color "#c829d1"
     end
 
     rule SiteHeadingEnd do
-      prop("background", "#09d5d7")
-      prop("background-clip", "text")
+      background "#09d5d7"
+      background_clip :text
       color "transparent"
     end
 
     rule ContentLayout do
-      display Flex
-      justifyContent SpaceBetween
+      display :flex
+      justify_content :space_between
     end
 
-    media(maxWidth 800.px) do
+    media(max_width 800.px) do
       rule HomePageAd do
-        display None
+        display :none
       end
     end
   end

@@ -11,6 +11,20 @@ class CSS::Stylesheet
     end.join(", ")
   end
 
+  # Emit a plain CSS comment at the current position in the stylesheet.
+  macro comment(text)
+    def self.to_s(io : IO)
+      {% if @type.class.methods.map(&.name.stringify).includes?("to_s") %}
+        previous_def
+        io << "\n\n"
+      {% end %}
+
+      io << "/* "
+      io << {{text}}
+      io << " */"
+    end
+  end
+
   ToHtml.class_template do
     link self
   end

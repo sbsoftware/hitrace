@@ -8,16 +8,16 @@ class GameSummaryView
 
   style do
     rule GameSummary do
-      display Flex
-      flexDirection Column
-      alignItems Center
+      display :flex
+      flex_direction :column
+      align_items :center
     end
 
     rule Buttons do
-      display Flex
-      justifyContent Center
-      prop("gap", 20.px)
-      marginTop 20.px
+      display :flex
+      justify_content :center
+      gap 20.px
+      margin_top 20.px
     end
   end
 

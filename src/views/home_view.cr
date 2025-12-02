@@ -13,47 +13,55 @@ class HomeView
 
   style do
     rule TopContainer do
-      display Flex
-      flexDirection ColumnReverse
-      alignItems Center
+      display :flex
+      flex_direction :column_reverse
+      align_items :center
       width 100.vw
-      maxWidth 650.px
+      max_width 650.px
     end
 
     rule TopBox do
-      display Flex
-      flexDirection Column
-      justifyContent Center
-      alignItems Center
+      display :flex
+      flex_direction :column
+      justify_content :center
+      align_items :center
       width 80.percent
       padding 5.px
-      marginTop 10.px
+      margin_top 10.px
     end
 
     rule PlayButtonContainer do
-      marginTop 20.px
-      display Flex
-      justifyContent SpaceBetween
-      prop("gap", 20.px)
-      alignItems Center
+      margin_top 20.px
+      display :flex
+      justify_content :space_between
+      gap 20.px
+      align_items :center
     end
 
     rule GameHint do
       padding 0, 5.px
-      display Flex
-      alignItems Center
-      prop("flex-shrink", 2)
+      display :flex
+      align_items :center
+      flex_shrink 2
     end
 
     rule HomeViewGrid do
-      prop("margin-top", 15.px)
-      display Flex
-      justifyContent Center
+      margin_top 15.px
+      display :flex
+      justify_content :center
     end
 
     rule HomeViewGrid > GameGridView::Grid do
-      prop("transform", "perspective(800px) scale(0.6) translate(0, -120px) rotateX(35deg) rotateZ(28deg) rotateY(-15deg) translate(-40px, -60px)")
-      prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
+      transform(
+        perspective(800.px),
+        scale(0.6),
+        translate(0, -120.px),
+        rotate_x(35.deg),
+        rotate_z(28.deg),
+        rotate_y(-15.deg),
+        translate(-40.px, -60.px)
+      )
+      box_shadow 0.px, 50.px, 30.px, 20.px, rgb(30, 30, 30, alpha: 50.percent)
     end
   end
 

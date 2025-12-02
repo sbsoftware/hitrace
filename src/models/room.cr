@@ -89,26 +89,34 @@ class Room < ApplicationRecord
 
       style do
         rule Description do
-          display Flex
-          justifyContent Center
-          fontSize 18.px
-          marginBottom 15.px
+          display :flex
+          justify_content :center
+          font_size 18.px
+          margin_bottom 15.px
         end
 
         rule JoinButton do
-          display Flex
-          justifyContent Center
+          display :flex
+          justify_content :center
         end
 
         rule FakeGrid do
-          prop("margin-top", 15.px)
-          display Flex
-          justifyContent Center
+          margin_top 15.px
+          display :flex
+          justify_content :center
         end
 
         rule FakeGrid > GameGridView::Grid do
-          prop("transform", "perspective(800px) scale(0.6) translate(0, -120px) rotateX(35deg) rotateZ(28deg) rotateY(-15deg) translate(-40px, -60px)")
-          prop("box-shadow", "0px 50px 30px 20px rgba(30, 30, 30, 0.5)")
+          transform(
+            perspective(800.px),
+            scale(0.6),
+            translate(0, -120.px),
+            rotate_x(35.deg),
+            rotate_z(28.deg),
+            rotate_y(-15.deg),
+            translate(-40.px, -60.px)
+          )
+          box_shadow 0.px, 50.px, 30.px, 20.px, rgb(30, 30, 30, alpha: 50.percent)
         end
       end
 

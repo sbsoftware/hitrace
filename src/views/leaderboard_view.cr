@@ -7,15 +7,15 @@ class LeaderboardView
   style do
     rule Leaderboard do
       width 100.percent
-      border 1.px, Solid, White
-      prop("border-radius", 5.px)
+      border 1.px, :solid, :white
+      border_radius 5.px
       padding 5.px
-      boxSizing BorderBox
+      box_sizing :border_box
     end
 
     rule Entry do
-      display Flex
-      justifyContent SpaceBetween
+      display :flex
+      justify_content :space_between
     end
   end
 

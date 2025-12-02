@@ -60,13 +60,13 @@ class GamePlayer < ApplicationRecord
 
   style do
     rule PlayerColor1 do
-      backgroundColor "#FF7675"
-      prop("box-shadow", "none")
+      background_color "#FF7675"
+      box_shadow :none
     end
 
     rule PlayerColor2 do
-      backgroundColor "#74B9FF"
-      prop("box-shadow", "none")
+      background_color "#74B9FF"
+      box_shadow :none
     end
   end
 
