@@ -66,7 +66,8 @@ class GameGridView
       width 100.vw
       max_width 500.px
       height :auto
-      aspect_ratio CSS::Ratio.new(1, 1)
+      aspect_ratio ratio(1, 1)
+      overscroll_behavior :none, :none
     end
 
     rule Row do
