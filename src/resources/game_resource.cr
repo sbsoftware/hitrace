@@ -9,7 +9,7 @@ class GameResource < ApplicationResource
         end
         render GameView.new(ctx: ctx, game_player: game_player)
       else
-        redirect HomeResource.uri_path
+        redirect HomePage.uri_path
       end
     end
   end

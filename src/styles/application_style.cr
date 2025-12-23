@@ -10,9 +10,8 @@ class ApplicationStyle < CSS::Stylesheet
     box_sizing :border_box
     word_wrap :break_word
     margin_bottom 50.px
-  end
-
-  rule LegalText > a do
-    color :black
+    rule "a" do
+      color :black
+    end
   end
 end

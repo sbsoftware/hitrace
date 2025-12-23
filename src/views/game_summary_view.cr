@@ -34,7 +34,7 @@ class GameSummaryView
       game.leaderboard.renderer(ctx)
 
       div Buttons do
-        a HomeResource do
+        a HomePage do
           GameButton.to_html { "Home" }
         end
 

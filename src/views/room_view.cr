@@ -6,7 +6,7 @@ class RoomView
   delegate :room, to: room_player
 
   ToHtml.instance_template do
-    a href: HomeResource.uri_path do
+    a href: HomePage.uri_path do
       GameButton.to_html { "Leave Room" }
     end
 

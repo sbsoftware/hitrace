@@ -3,7 +3,7 @@ class WaitResource < ApplicationResource
     return unless user = ctx.session.user
 
     unless player = user.waiting_player
-      redirect HomeResource.uri_path
+      redirect HomePage.uri_path
       return
     end
 

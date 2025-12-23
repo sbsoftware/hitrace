@@ -27,7 +27,7 @@ class WaitingPlayer < ApplicationRecord
       model.update(last_connection_check_at: Time.utc)
     rescue e : Exception
       ctx.response.status_code = 303
-      ctx.response.headers["Location"] = HomeResource.uri_path
+      ctx.response.headers["Location"] = HomePage.uri_path
     end
   end
 end

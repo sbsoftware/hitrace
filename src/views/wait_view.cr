@@ -6,7 +6,7 @@ class WaitView
   ToHtml.instance_template do
     h3 { "Waiting for another player..." }
 
-    a href: HomeResource.uri_path do
+    a href: HomePage.uri_path do
       "Home"
     end
 

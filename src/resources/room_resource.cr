@@ -3,11 +3,11 @@ require "./application_resource"
 class RoomResource < ApplicationResource
   def show
     unless room = Room.where(id: id).first?
-      redirect HomeResource.uri_path
+      redirect HomePage.uri_path
       return
     end
     unless ctx.room_policy.show?(room)
-      redirect HomeResource.uri_path
+      redirect HomePage.uri_path
       return
     end
 
@@ -16,7 +16,7 @@ class RoomResource < ApplicationResource
     end
 
     unless room_player
-      redirect HomeResource.uri_path
+      redirect HomePage.uri_path
       return
     end
 

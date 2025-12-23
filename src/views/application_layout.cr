@@ -11,8 +11,8 @@ class TXTFile < AssetFile
   end
 end
 
-OutfitRegular = TTFFile.register "assets/fonts/Outfit/Outfit-Regular.ttf", "#{__DIR__}/../../assets/fonts/Outfit/Outfit-Regular.ttf"
-OutfitLicense = TXTFile.register "assets/fonts/Outfit/OFL.txt", "#{__DIR__}/../../assets/fonts/Outfit/OFL.txt"
+OutfitRegular          = TTFFile.register "assets/fonts/Outfit/Outfit-Regular.ttf", "#{__DIR__}/../../assets/fonts/Outfit/Outfit-Regular.ttf"
+OutfitLicense          = TXTFile.register "assets/fonts/Outfit/OFL.txt", "#{__DIR__}/../../assets/fonts/Outfit/OFL.txt"
 RubikSprayPaintRegular = TTFFile.register "assets/fonts/RubikSprayPaint/RubikSprayPaint.ttf", "#{__DIR__}/../../assets/fonts/Rubik_Spray_Paint/RubikSprayPaint-Regular.ttf"
 RubikSprayPaintLicense = TXTFile.register "assets/fonts/RubikSprayPaint/OFL.txt", "#{__DIR__}/../../assets/fonts/Rubik_Spray_Paint/OFL.txt"
 
@@ -134,7 +134,7 @@ class ApplicationLayout < ToHtml::Layout
       end
 
       h1(SiteHeading) do
-        a HomeResource do
+        a HomePage do
           span(SiteHeadingBegin) { "HIT" }
           span(SiteHeadingEnd) { "RACE" }
         end
@@ -146,7 +146,7 @@ class ApplicationLayout < ToHtml::Layout
         div HomePageAd do
           ins class: "adsbygoogle", style: "display:block", data_ad_client: "ca-pub-5259491325832394", data_ad_slot: "1032697835", data_ad_format: "auto", data_full_width_responsive: "true"
           script do
-           "(adsbygoogle = window.adsbygoogle || []).push({});"
+            "(adsbygoogle = window.adsbygoogle || []).push({});"
           end
         end
       end

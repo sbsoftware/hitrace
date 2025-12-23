@@ -13,11 +13,11 @@ class LegalMenuView
 
   ToHtml.class_template do
     div LegalMenu do
-      a PrivacyNoticeResource do
+      a PrivacyNoticePage do
         "Datenschutz"
       end
       "&nbsp;|&nbsp;"
-      a LegalNoticeResource do
+      a LegalNoticePage do
         "Impressum"
       end
     end

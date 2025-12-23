@@ -1,10 +1,6 @@
 class GameService
   def self.create_game(players : Tuple(WaitingPlayer, WaitingPlayer) | Tuple(RoomPlayer, RoomPlayer), room_id = nil) : Game?
-    return if players.any? do |player|
-      next true unless player.online?
-
-      !player.user.active_game_player.nil?
-    end
+    return if players.any? { |player| !player.online? || player.user.active_game_player }
 
     # TODO: Transaction start
     game = Game.create(room_id: room_id)
