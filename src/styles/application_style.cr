@@ -12,6 +12,8 @@ class ApplicationStyle < CSS::Stylesheet
     margin_bottom 50.px
     rule "a" do
       color :black
+      text_decoration_line :underline
+      text_decoration_color :black
     end
   end
 end

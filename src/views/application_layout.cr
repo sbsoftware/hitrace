@@ -16,6 +16,13 @@ OutfitLicense          = TXTFile.register "assets/fonts/Outfit/OFL.txt", "#{__DI
 RubikSprayPaintRegular = TTFFile.register "assets/fonts/RubikSprayPaint/RubikSprayPaint.ttf", "#{__DIR__}/../../assets/fonts/Rubik_Spray_Paint/RubikSprayPaint-Regular.ttf"
 RubikSprayPaintLicense = TXTFile.register "assets/fonts/RubikSprayPaint/OFL.txt", "#{__DIR__}/../../assets/fonts/Rubik_Spray_Paint/OFL.txt"
 
+record FontAssetInfo, name : String, font : AssetFile, license : AssetFile
+
+FONT_ASSETS = [
+  FontAssetInfo.new(name: "Outfit", font: OutfitRegular, license: OutfitLicense),
+  FontAssetInfo.new(name: "Rubik Spray Paint", font: RubikSprayPaintRegular, license: RubikSprayPaintLicense),
+]
+
 class ApplicationLayout < ToHtml::Layout
   include Crumble::ContextView
 

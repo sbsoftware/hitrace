@@ -28,4 +28,18 @@ describe "Crumble::Page integration" do
     request_ctx.response.status_code.should eq(200)
     io.to_s.should contain("Datenschutzerklärung")
   end
+
+  it "renders LegalNoticePage at /legal_notice and includes font license links" do
+    io = IO::Memory.new
+    request_ctx = Crumble::Server::TestRequestContext.new(io, method: "GET", resource: "/legal_notice")
+
+    LegalNoticePage.handle(request_ctx).should be_true
+    request_ctx.response.close
+    request_ctx.response.status_code.should eq(200)
+    io.to_s.should contain("Impressum")
+
+    FONT_ASSETS.each do |font_asset|
+      io.to_s.should contain(%(href="#{font_asset.license.uri_path}"))
+    end
+  end
 end

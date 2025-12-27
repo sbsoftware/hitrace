@@ -50,6 +50,18 @@ class LegalNoticePage < ApplicationPage
             "eRecht24"
           end
         end
+
+        h2 { "Schriftarten" }
+
+        ul do
+          FONT_ASSETS.each do |font_asset|
+            li do
+              a href: font_asset.license.uri_path do
+                "#{font_asset.name} – Lizenz"
+              end
+            end
+          end
+        end
       end
     end
   end
