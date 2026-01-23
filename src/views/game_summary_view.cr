@@ -39,7 +39,7 @@ class GameSummaryView
         end
 
         if room_id = game.room_id
-          a href: RoomResource.uri_path(room_id) do
+          a href: RoomPage.uri_path(room_id) do
             GameButton.to_html { "Back to room" }
           end
         else

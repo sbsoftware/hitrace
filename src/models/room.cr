@@ -50,7 +50,7 @@ class Room < ApplicationRecord
 
       if player
         ctx.response.status_code = 303
-        ctx.response.headers["Location"] = RoomResource.uri_path(model.id)
+        ctx.response.headers["Location"] = RoomPage.uri_path(model.id)
       end
     end
 
@@ -81,7 +81,7 @@ class Room < ApplicationRecord
     end
   end
 
-  accessible RoomPlayer, RoomResource, player_list do
+  accessible RoomPlayer, RoomPage, player_list do
     access_view do
       css_class Description
       css_class JoinButton

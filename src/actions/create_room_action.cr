@@ -6,7 +6,7 @@ class CreateRoomAction < Crumble::Turbo::Action
     RoomPlayer.create(room_id: room.id, user_id: user.id, admin: true)
 
     ctx.response.status_code = 303
-    ctx.response.headers["Location"] = RoomResource.uri_path(room.id)
+    ctx.response.headers["Location"] = RoomPage.uri_path(room.id)
   end
 
   view do
