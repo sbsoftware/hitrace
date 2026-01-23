@@ -8,7 +8,7 @@ class SetNameAction < Crumble::Turbo::Action
   controller do
     return unless body = ctx.request.body
 
-    form = Form.from_www_form(body.gets_to_end)
+    form = Form.from_www_form(ctx, body.gets_to_end)
 
     # TODO: Move size validation into form as soon as possible
     return unless form.valid? && (name = form.name) && name.size > 0

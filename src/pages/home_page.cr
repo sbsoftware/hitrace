@@ -1,9 +1,7 @@
 require "./application_page"
 
 class HomePage < ApplicationPage
-  def self.root_path
-    "/"
-  end
+  root_path "/"
 
   view HomeView
 end
