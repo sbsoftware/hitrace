@@ -29,7 +29,7 @@ class RoomPlayer < ApplicationRecord
 
       if game_id = model.room.game_id
         ctx.response.status_code = 303
-        ctx.response.headers["Location"] = GameResource.uri_path(game_id)
+        ctx.response.headers["Location"] = GamePage.uri_path(game_id)
       end
     end
   end

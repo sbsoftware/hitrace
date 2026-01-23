@@ -20,7 +20,7 @@ class WaitingPlayer < ApplicationRecord
     controller do
       if game_player = model.user.active_game_player
         ctx.response.status_code = 303
-        ctx.response.headers["Location"] = GameResource.uri_path(game_player.game_id)
+        ctx.response.headers["Location"] = GamePage.uri_path(game_player.game_id)
         return
       end
 
