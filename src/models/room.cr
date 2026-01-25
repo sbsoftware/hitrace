@@ -38,30 +38,6 @@ class Room < ApplicationRecord
     end
   end
 
-  model_action :join, player_list do
-    controller do
-      return unless model
-
-      unless player = model.room_players.any? { |rp| rp.user_id == ctx.session.user_id }
-        if (room_id = model.id) && model.game_id.nil? && (user_id = ctx.session.user_id)
-          player = RoomPlayer.create(room_id: room_id, user_id: user_id)
-        end
-      end
-
-      if player
-        ctx.response.status_code = 303
-        ctx.response.headers["Location"] = RoomPage.uri_path(model.id)
-      end
-    end
-
-    view do
-      # TODO: This probably needs a button
-      template do
-        action_form.to_html { nil }
-      end
-    end
-  end
-
   model_action :set_ready, player_list do
     controller do
       return unless model
