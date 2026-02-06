@@ -21,6 +21,18 @@ class GameSummaryView
     end
   end
 
+  ToHtml.inline_template :summary_link_button do |path, label|
+    a href: path do
+      GameButton.to_html { label }
+    end
+  end
+
+  ToHtml.inline_template :play_again_button do
+    form action: WaitResource.uri_path, method: "POST" do
+      GameButton.to_html { "Play again" }
+    end
+  end
+
   ToHtml.instance_template do
     div GameSummary do
       if winner = game.winner
@@ -34,18 +46,12 @@ class GameSummaryView
       game.leaderboard.renderer(ctx)
 
       div Buttons do
-        a HomePage do
-          GameButton.to_html { "Home" }
-        end
+        summary_link_button(HomePage.uri_path, "Home")
 
         if room_id = game.room_id
-          a href: RoomPage.uri_path(room_id) do
-            GameButton.to_html { "Back to room" }
-          end
+          summary_link_button(RoomPage.uri_path(room_id), "Back to room")
         else
-          form action: WaitResource.uri_path, method: "POST" do
-            GameButton.to_html { "Play again" }
-          end
+          play_again_button
         end
       end
     end
