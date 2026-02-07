@@ -1,4 +1,5 @@
 require "./application_record"
+require "./hit_target_hit"
 
 class HitTarget < ApplicationRecord
   column game_id : Int64
@@ -32,8 +33,15 @@ class HitTarget < ApplicationRecord
     controller do
       # TODO: Transaction Start
       # TODO: Lock model?
+      hit_at_ms = Time.utc.to_unix_ms
+
+      # Record this player's hit time, even if another player already won the target.
+      unless HitTargetHit.where(hit_target_id: model.id, game_player_id: game_player.id).first?
+        HitTargetHit.create(hit_target_id: model.id, game_player_id: game_player.id, hit_at_ms: hit_at_ms)
+      end
+
       if model.hit_at_ms.nil?
-        model.update(hitting_game_player_id: game_player.id, hit_at_ms: Time.utc.to_unix_ms)
+        model.update(hitting_game_player_id: game_player.id, hit_at_ms: hit_at_ms)
 
         game_player.score = game_player.score.value + 1
         game_player.save
