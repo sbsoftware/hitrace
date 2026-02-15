@@ -190,28 +190,22 @@ class Room < ApplicationRecord
   end
 
   class AccessPage
-    class InviteMetaTags
+    class InviteSocialMetaTags
       include Crumble::ContextView
 
       private def room : Room
         ctx.handler.as(Room::AccessPage).model.not_nil!
       end
 
-      # Social previews are fetched by external crawlers, so metadata must use absolute URLs.
+      # Open Graph core tags are now provided via Crumble's handler hooks (`og_*` methods below).
+      # Keep platform-specific and optional tags here.
       template do
         invite_title = room.invite_title
         invite_description = room.invite_description
-        invite_url = room.share_uri
         invite_image_uri = room.invite_preview_image_uri
         invite_image_alt = room.invite_preview_alt
 
         meta name: "description", content: invite_description
-        meta property: "og:type", content: "website"
-        meta property: "og:site_name", content: "HITRACE"
-        meta property: "og:title", content: invite_title
-        meta property: "og:description", content: invite_description
-        meta property: "og:url", content: invite_url
-        meta property: "og:image", content: invite_image_uri
         meta property: "og:image:alt", content: invite_image_alt
         meta name: "twitter:card", content: "summary_large_image"
         meta name: "twitter:title", content: invite_title
@@ -223,12 +217,36 @@ class Room < ApplicationRecord
 
     layout ApplicationLayout do
       def head_children
-        super + {InviteMetaTags.new(ctx: ctx)}
+        super + {InviteSocialMetaTags.new(ctx: ctx)}
       end
     end
 
     def window_title : String?
       model.try(&.invite_title)
+    end
+
+    def og_title : String?
+      model.try(&.invite_title)
+    end
+
+    def og_description : String?
+      model.try(&.invite_description)
+    end
+
+    def og_image : String?
+      model.try(&.invite_preview_image_uri)
+    end
+
+    def og_url : String?
+      model.try(&.share_uri)
+    end
+
+    def og_type : String?
+      "website"
+    end
+
+    def og_site_name : String?
+      "HITRACE"
     end
   end
 end
