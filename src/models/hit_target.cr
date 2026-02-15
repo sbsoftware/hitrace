@@ -31,9 +31,9 @@ class HitTarget < ApplicationRecord
     end
 
     controller do
-      model.transaction do
-        hit_at_ms = Time.utc.to_unix_ms
+      hit_at_ms = Time.utc.to_unix_ms
 
+      model.transaction do
         # Record this player's hit time, even if another player already won the target.
         unless HitTargetHit.where(hit_target_id: model.id, game_player_id: game_player.id).first?
           HitTargetHit.create(hit_target_id: model.id, game_player_id: game_player.id, hit_at_ms: hit_at_ms)
