@@ -31,22 +31,21 @@ class HitTarget < ApplicationRecord
     end
 
     controller do
-      # TODO: Transaction Start
-      # TODO: Lock model?
-      hit_at_ms = Time.utc.to_unix_ms
+      model.transaction do
+        hit_at_ms = Time.utc.to_unix_ms
 
-      # Record this player's hit time, even if another player already won the target.
-      unless HitTargetHit.where(hit_target_id: model.id, game_player_id: game_player.id).first?
-        HitTargetHit.create(hit_target_id: model.id, game_player_id: game_player.id, hit_at_ms: hit_at_ms)
+        # Record this player's hit time, even if another player already won the target.
+        unless HitTargetHit.where(hit_target_id: model.id, game_player_id: game_player.id).first?
+          HitTargetHit.create(hit_target_id: model.id, game_player_id: game_player.id, hit_at_ms: hit_at_ms)
+        end
+
+        if model.hit_at_ms.nil?
+          model.update(hitting_game_player_id: game_player.id, hit_at_ms: hit_at_ms)
+
+          game_player.score = game_player.score.value + 1
+          game_player.save
+        end
       end
-
-      if model.hit_at_ms.nil?
-        model.update(hitting_game_player_id: game_player.id, hit_at_ms: hit_at_ms)
-
-        game_player.score = game_player.score.value + 1
-        game_player.save
-      end
-      # TODO: Transaction End
 
       model.game.game_players.each do |game_player|
         game_player.game_view.refresh!
