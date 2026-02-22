@@ -15,6 +15,7 @@ class WaitResource < ApplicationResource
 
     unless user.waiting_player
       WaitingPlayer.create(user_id: user.id)
+      MatchmakingJob.enqueue
     end
 
     redirect WaitResource.uri_path

@@ -8,6 +8,10 @@ shards:
     git: https://github.com/sbsoftware/crumble.git
     version: 0.30.0
 
+  crumble-jobs:
+    git: https://github.com/sbsoftware/crumble-jobs.git
+    version: 0.1.0
+
   crumble-orma:
     git: https://github.com/sbsoftware/crumble-orma.git
     version: 0.3.1
