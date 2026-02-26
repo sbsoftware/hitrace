@@ -6,22 +6,34 @@ class RoomMaintenanceJob < RecurringBackgroundJob
     changed = false
 
     Room.all.find_each do |room|
-      unless recent_room?(room)
+      if recent_room?(room)
+        logger.debug { "Skipping stale cleanup for room #{room.id.value}: last game started within #{STALE_ROOM_AGE}" }
+      else
+        logger.debug { "Running stale cleanup for room #{room.id.value}" }
         room.room_players.each do |room_player|
-          next unless stale_room_player?(room_player)
+          unless stale_room_player?(room_player)
+            logger.debug { "Keeping room player #{room_player.id.value} in room #{room.id.value}: connection check still fresh" }
+            next
+          end
 
           room_player.destroy
           changed = true
+          logger.info { "Removed stale room player #{room_player.id.value} from room #{room.id.value}" }
         end
 
         if room.room_players.empty?
           room.destroy
           changed = true
+          logger.info { "Destroyed empty stale room #{room.id.value}" }
           next
         end
+        logger.debug { "Room #{room.id.value} kept after cleanup: still has players" }
       end
 
-      next unless room.ready?
+      unless room.ready?
+        logger.debug { "Room #{room.id.value} not ready for game start" }
+        next
+      end
 
       room_players = room.room_players.to_a
       if game = GameService.create_game({room_players[0], room_players[1]}, room.id)
@@ -29,9 +41,15 @@ class RoomMaintenanceJob < RecurringBackgroundJob
         room.last_game_started_at = Time.utc
         room.save
         changed = true
+        logger.info { "Started room game #{game.id.value} for room #{room.id.value}" }
+      else
+        logger.debug do
+          "Room #{room.id.value} ready but game creation skipped for players #{room_players[0].id.value}/#{room_players[1].id.value}"
+        end
       end
     end
 
+    logger.debug { "Room maintenance iteration made no changes" } unless changed
     changed
   end
 
