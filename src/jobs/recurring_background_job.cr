@@ -11,10 +11,10 @@ abstract class RecurringBackgroundJob < Crumble::Jobs::Job
   def perform : Nil
     enqueue_immediately = false
 
-    logger.debug { "#{self.class.job_name} iteration started" }
+    logger.info { "#{self.class.job_name} iteration started" }
     begin
       enqueue_immediately = run_iteration
-      logger.debug { "#{self.class.job_name} iteration finished (enqueue_immediately=#{enqueue_immediately})" }
+      logger.info { "#{self.class.job_name} iteration finished (enqueue_immediately=#{enqueue_immediately})" }
     rescue error
       logger.error(exception: error) { "#{self.class.job_name} iteration failed" }
       raise error
@@ -26,18 +26,18 @@ abstract class RecurringBackgroundJob < Crumble::Jobs::Job
 
   private def schedule_next(*, immediate : Bool) : Nil
     if ENV[RESCHEDULE_DISABLE_ENV_KEY]? == "1"
-      logger.debug { "#{self.class.job_name} reschedule disabled via #{RESCHEDULE_DISABLE_ENV_KEY}" }
+      logger.info { "#{self.class.job_name} reschedule disabled via #{RESCHEDULE_DISABLE_ENV_KEY}" }
       return
     end
 
     if immediate
-      logger.debug { "#{self.class.job_name} scheduling immediate follow-up job" }
-      logger.debug { "#{self.class.job_name} enqueued follow-up job id=#{self.class.enqueue}" }
+      logger.info { "#{self.class.job_name} scheduling immediate follow-up job" }
+      logger.info { "#{self.class.job_name} enqueued follow-up job id=#{self.class.enqueue}" }
     else
-      logger.debug { "#{self.class.job_name} scheduling delayed follow-up job in #{RESCHEDULE_INTERVAL}" }
+      logger.info { "#{self.class.job_name} scheduling delayed follow-up job in #{RESCHEDULE_INTERVAL}" }
       spawn do
         sleep RESCHEDULE_INTERVAL
-        logger.debug { "#{self.class.job_name} enqueued delayed follow-up job id=#{self.class.enqueue}" }
+        logger.info { "#{self.class.job_name} enqueued delayed follow-up job id=#{self.class.enqueue}" }
       end
     end
   end

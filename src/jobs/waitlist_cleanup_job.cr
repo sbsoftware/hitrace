@@ -7,11 +7,11 @@ class WaitlistCleanupJob < RecurringBackgroundJob
 
     WaitingPlayer.all.each do |waiting_player|
       if waiting_player.created_at >= stale_before
-        logger.debug { "Keeping waiting player #{waiting_player.id.value}: age below threshold (#{STALE_WAITING_PLAYER_AGE})" }
+        logger.info { "Keeping waiting player #{waiting_player.id.value}: age below threshold (#{STALE_WAITING_PLAYER_AGE})" }
         next
       end
       if waiting_player.online?
-        logger.debug { "Keeping waiting player #{waiting_player.id.value}: stale but still online" }
+        logger.info { "Keeping waiting player #{waiting_player.id.value}: stale but still online" }
         next
       end
 
@@ -20,7 +20,7 @@ class WaitlistCleanupJob < RecurringBackgroundJob
       logger.info { "Removed stale offline waiting player #{waiting_player.id.value}" }
     end
 
-    logger.debug { "No stale offline waiting players removed" } unless removed_waiting_player
+    logger.info { "No stale offline waiting players removed" } unless removed_waiting_player
     removed_waiting_player
   end
 end

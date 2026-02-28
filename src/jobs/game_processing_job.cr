@@ -22,12 +22,12 @@ class GameProcessingJob < RecurringBackgroundJob
           changed_for_game = true
           logger.info { "Started game #{game.id.value} at created_at due to start timeout (#{GAME_START_TIMEOUT})" }
         else
-          logger.debug { "Game #{game.id.value} still waiting for ready players before timeout" }
+          logger.info { "Game #{game.id.value} still waiting for ready players before timeout" }
         end
 
         refresh_game_views(game)
       else
-        logger.debug { "Game #{game.id.value} already started" }
+        logger.info { "Game #{game.id.value} already started" }
       end
 
       if game.finished?
@@ -44,7 +44,7 @@ class GameProcessingJob < RecurringBackgroundJob
             changed = true
             changed_for_game = true
           else
-            logger.debug { "Game #{game.id.value} finished without a winner" }
+            logger.info { "Game #{game.id.value} finished without a winner" }
           end
         else
           logger.warn { "Game #{game.id.value} finished with unexpected player count #{game_players.size}" }
@@ -56,7 +56,7 @@ class GameProcessingJob < RecurringBackgroundJob
           changed_for_game = true
           logger.info { "Reset room #{room.id.value} after finished game #{game.id.value}" }
         else
-          logger.debug { "No room reset needed for game #{game.id.value}" }
+          logger.info { "No room reset needed for game #{game.id.value}" }
         end
 
         game.update(processing_completed: true)
@@ -66,18 +66,18 @@ class GameProcessingJob < RecurringBackgroundJob
 
         refresh_game_views(game)
       else
-        logger.debug { "Game #{game.id.value} not finished yet" }
+        logger.info { "Game #{game.id.value} not finished yet" }
       end
 
-      logger.debug { "Game #{game.id.value} iteration resulted in no state change" } unless changed_for_game
+      logger.info { "Game #{game.id.value} iteration resulted in no state change" } unless changed_for_game
     end
 
-    logger.debug { "Game processing iteration made no changes" } unless changed
+    logger.info { "Game processing iteration made no changes" } unless changed
     changed
   end
 
   private def refresh_game_views(game : Game) : Nil
-    logger.debug { "Refreshing game views for game #{game.id.value}" }
+    logger.info { "Refreshing game views for game #{game.id.value}" }
     game.game_players.each do |game_player|
       game_player.game_view.refresh!
     end

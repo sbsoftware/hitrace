@@ -7,12 +7,12 @@ class RoomMaintenanceJob < RecurringBackgroundJob
 
     Room.all.find_each do |room|
       if recent_room?(room)
-        logger.debug { "Skipping stale cleanup for room #{room.id.value}: last game started within #{STALE_ROOM_AGE}" }
+        logger.info { "Skipping stale cleanup for room #{room.id.value}: last game started within #{STALE_ROOM_AGE}" }
       else
-        logger.debug { "Running stale cleanup for room #{room.id.value}" }
+        logger.info { "Running stale cleanup for room #{room.id.value}" }
         room.room_players.each do |room_player|
           unless stale_room_player?(room_player)
-            logger.debug { "Keeping room player #{room_player.id.value} in room #{room.id.value}: connection check still fresh" }
+            logger.info { "Keeping room player #{room_player.id.value} in room #{room.id.value}: connection check still fresh" }
             next
           end
 
@@ -27,11 +27,11 @@ class RoomMaintenanceJob < RecurringBackgroundJob
           logger.info { "Destroyed empty stale room #{room.id.value}" }
           next
         end
-        logger.debug { "Room #{room.id.value} kept after cleanup: still has players" }
+        logger.info { "Room #{room.id.value} kept after cleanup: still has players" }
       end
 
       unless room.ready?
-        logger.debug { "Room #{room.id.value} not ready for game start" }
+        logger.info { "Room #{room.id.value} not ready for game start" }
         next
       end
 
@@ -43,13 +43,13 @@ class RoomMaintenanceJob < RecurringBackgroundJob
         changed = true
         logger.info { "Started room game #{game.id.value} for room #{room.id.value}" }
       else
-        logger.debug do
+        logger.info do
           "Room #{room.id.value} ready but game creation skipped for players #{room_players[0].id.value}/#{room_players[1].id.value}"
         end
       end
     end
 
-    logger.debug { "Room maintenance iteration made no changes" } unless changed
+    logger.info { "Room maintenance iteration made no changes" } unless changed
     changed
   end
 
