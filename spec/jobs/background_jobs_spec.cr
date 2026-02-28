@@ -47,22 +47,41 @@ describe "background jobs" do
     Crumble::Jobs.set_queue(Crumble::Jobs::InMemoryQueue.new(10_000))
   end
 
-  it "enqueues matchmaking exactly once for the created waiting player" do
+  it "does not enqueue matchmaking while creating a waiting player" do
     queue = Crumble::Jobs::InMemoryQueue.new(10_000)
     Crumble::Jobs.set_queue(queue)
     io = IO::Memory.new
     request_ctx = Crumble::Server::TestRequestContext.new(io, method: "POST", resource: WaitResource.uri_path)
     WaitResource.handle(request_ctx).should be_true
 
-    waiting_player = WaitingPlayer.all.first?
-    waiting_player.should_not be_nil
+    WaitingPlayer.all.count.should eq(1)
+    queue.reserve(1.millisecond).should be_nil
+  end
 
+  it "enqueues matchmaking once when a waiting player becomes online" do
+    queue = Crumble::Jobs::InMemoryQueue.new(10_000)
+    Crumble::Jobs.set_queue(queue)
+    waiting_player = WaitingPlayer.create(user_id: create_user("wait-online").id)
+    io = IO::Memory.new
+    request_ctx = Crumble::Server::TestRequestContext.new(
+      io,
+      method: "POST",
+      resource: WaitingPlayer::ConnectionCheckAction.uri_path(waiting_player.id)
+    )
+    WaitingPlayer::ConnectionCheckAction.handle(request_ctx).should be_true
     reservation = queue.reserve(50.milliseconds)
     reservation.should_not be_nil
     payload = reservation.not_nil!.payload
     payload.job_class.should eq(MatchmakingJob.job_name)
     payload.args.size.should eq(1)
-    payload.args[0].to_value.should eq(waiting_player.not_nil!.id.value)
+    payload.args[0].to_value.should eq(waiting_player.id.value)
+
+    second_request_ctx = Crumble::Server::TestRequestContext.new(
+      IO::Memory.new,
+      method: "POST",
+      resource: WaitingPlayer::ConnectionCheckAction.uri_path(waiting_player.id)
+    )
+    WaitingPlayer::ConnectionCheckAction.handle(second_request_ctx).should be_true
     queue.reserve(1.millisecond).should be_nil
   end
 

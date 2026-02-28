@@ -24,7 +24,9 @@ class WaitingPlayer < ApplicationRecord
         return
       end
 
+      was_online = model.online?
       model.update(last_connection_check_at: Time.utc)
+      BackgroundJobs.enqueue_matchmaking(model.id.value) unless was_online
       BackgroundJobs.enqueue_waitlist_cleanup(model.id.value, delay: 11.seconds)
     rescue e : Exception
       ctx.response.status_code = 303
