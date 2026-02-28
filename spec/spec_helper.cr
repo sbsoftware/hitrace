@@ -3,7 +3,7 @@ File.delete("./test.db")
 require "../src/environment"
 require "crumble/spec/test_handler_context"
 
-ENV["HIT_DISABLE_JOB_RESCHEDULE"] = "1"
+ENV["HIT_DISABLE_DELAYED_JOB_ENQUEUE"] = "1"
 Crumble::Jobs.set_queue(Crumble::Jobs::InMemoryQueue.new(10_000))
 
 {% for orm_class in Orma::Record.all_subclasses %}

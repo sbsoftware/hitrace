@@ -126,7 +126,7 @@ class GamePlayer < ApplicationRecord
       return unless time
 
       GamePlayerTimeSync.create(game_player_id: model.id, client_time_ms: time, server_time_ms: Time.utc.to_unix_ms)
-      GameProcessingJob.enqueue
+      BackgroundJobs.enqueue_game_processing(model.game_id.value)
     end
 
     view do

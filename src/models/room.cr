@@ -70,7 +70,7 @@ class Room < ApplicationRecord
       if room_player = model.room_players.find { |rp| rp.user_id == ctx.session.user_id }
         room_player.ready = true
         room_player.save
-        RoomMaintenanceJob.enqueue
+        BackgroundJobs.enqueue_room_maintenance(model.id.value)
       end
     end
 

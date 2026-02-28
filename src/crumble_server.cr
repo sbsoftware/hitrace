@@ -23,7 +23,6 @@ web_manifest do
 end
 
 worker = Crumble::Jobs::Worker.new
-BackgroundJobs.enqueue_startup_jobs
 
 spawn do
   worker.start

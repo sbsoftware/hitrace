@@ -1,31 +1,39 @@
-class MatchmakingJob < RecurringBackgroundJob
-  def run_iteration : Bool
-    game_created = false
+require "log"
 
-    if WaitingPlayer.all.count < 2
-      logger.info { "Skipping matchmaking: fewer than two waiting players" }
-      return false
+class MatchmakingJob < Crumble::Jobs::Job
+  params waiting_player_id : Int64
+
+  def perform : Nil
+    unless waiting_player = WaitingPlayer.where(id: waiting_player_id).first?
+      logger.info { "Skipping matchmaking: waiting player #{waiting_player_id} not found" }
+      return
+    end
+    unless waiting_player.online?
+      logger.info { "Skipping matchmaking for waiting player #{waiting_player.id.value}: player is offline" }
+      return
+    end
+    if waiting_player.user.active_game_player
+      logger.info { "Skipping matchmaking for waiting player #{waiting_player.id.value}: already in active game" }
+      return
     end
 
-    WaitingPlayer.all.to_a.each_slice(2) do |waiting_players|
-      if waiting_players.size < 2
-        logger.info { "Skipping unmatched waiting player #{waiting_players[0].id.value}" }
-        next
-      end
-
-      if game = GameService.create_game({waiting_players[0], waiting_players[1]})
-        game_created = true
-        logger.info do
-          "Created game #{game.id.value} from waiting players #{waiting_players[0].id.value} and #{waiting_players[1].id.value}"
-        end
-      else
-        logger.info do
-          "Skipped waiting pair #{waiting_players[0].id.value}/#{waiting_players[1].id.value}: pair not eligible for game creation"
-        end
-      end
+    unless opponent = WaitingPlayer.all.order_by_id!.find do |player|
+             player.id != waiting_player.id && player.online? && player.user.active_game_player.nil?
+           end
+      logger.info { "Skipping matchmaking for waiting player #{waiting_player.id.value}: no opponent available" }
+      return
     end
 
-    logger.info { "Matchmaking iteration created no games" } unless game_created
-    game_created
+    if game = GameService.create_game({waiting_player, opponent})
+      logger.info { "Created game #{game.id.value} from waiting players #{waiting_player.id.value} and #{opponent.id.value}" }
+      BackgroundJobs.enqueue_game_processing(game.id.value, delay: GameProcessingJob::GAME_START_TIMEOUT)
+      return
+    end
+
+    logger.info { "Skipped waiting pair #{waiting_player.id.value}/#{opponent.id.value}: pair not eligible for game creation" }
+  end
+
+  private def logger : Log
+    Log.for(self.class.job_name)
   end
 end

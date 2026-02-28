@@ -26,24 +26,44 @@ def mark_ready(game_player : GamePlayer) : Nil
   end
 end
 
+def clear_tables : Nil
+  [
+    "hit_target_hits",
+    "game_player_time_syncs",
+    "hit_targets",
+    "game_players",
+    "games",
+    "room_players",
+    "rooms",
+    "waiting_players",
+    "leaderboard_entrys",
+    "users",
+  ].each { |table| ApplicationRecord.db.exec("DELETE FROM #{table}") }
+end
+
 describe "background jobs" do
   before_each do
-    [
-      "hit_target_hits",
-      "game_player_time_syncs",
-      "hit_targets",
-      "game_players",
-      "games",
-      "room_players",
-      "rooms",
-      "waiting_players",
-      "leaderboard_entrys",
-      "users",
-    ].each do |table|
-      ApplicationRecord.db.exec("DELETE FROM #{table}")
-    end
-
+    clear_tables
     Crumble::Jobs.set_queue(Crumble::Jobs::InMemoryQueue.new(10_000))
+  end
+
+  it "enqueues matchmaking exactly once for the created waiting player" do
+    queue = Crumble::Jobs::InMemoryQueue.new(10_000)
+    Crumble::Jobs.set_queue(queue)
+    io = IO::Memory.new
+    request_ctx = Crumble::Server::TestRequestContext.new(io, method: "POST", resource: WaitResource.uri_path)
+    WaitResource.handle(request_ctx).should be_true
+
+    waiting_player = WaitingPlayer.all.first?
+    waiting_player.should_not be_nil
+
+    reservation = queue.reserve(50.milliseconds)
+    reservation.should_not be_nil
+    payload = reservation.not_nil!.payload
+    payload.job_class.should eq(MatchmakingJob.job_name)
+    payload.args.size.should eq(1)
+    payload.args[0].to_value.should eq(waiting_player.not_nil!.id.value)
+    queue.reserve(1.millisecond).should be_nil
   end
 
   it "removes offline stale waiting players older than 20 seconds" do
@@ -63,7 +83,7 @@ describe "background jobs" do
       last_connection_check_at: Time.utc - 2.minutes
     )
 
-    WaitlistCleanupJob.new.perform
+    WaitlistCleanupJob.new(stale_offline.id.value).perform
 
     WaitingPlayer.where(id: stale_offline.id.value).first?.should be_nil
     WaitingPlayer.where(id: stale_online.id.value).first?.should_not be_nil
@@ -74,7 +94,7 @@ describe "background jobs" do
     waiting_player_1 = WaitingPlayer.create(user_id: create_user("match-1").id, last_connection_check_at: Time.utc)
     waiting_player_2 = WaitingPlayer.create(user_id: create_user("match-2").id, last_connection_check_at: Time.utc)
 
-    MatchmakingJob.new.perform
+    MatchmakingJob.new(waiting_player_1.id.value).perform
 
     game = Game.all.order_by_id!(:desc).first?
     game.should_not be_nil
@@ -85,16 +105,23 @@ describe "background jobs" do
 
   it "removes stale offline room players and destroys empty stale rooms" do
     room = Room.create(name: "Stale room")
+    other_room = Room.create(name: "Other stale room")
     RoomPlayer.create(
       room_id: room.id,
       user_id: create_user("stale-room-player").id,
       last_connection_check_at: Time.utc - 2.minutes
     )
+    RoomPlayer.create(
+      room_id: other_room.id,
+      user_id: create_user("other-stale-room-player").id,
+      last_connection_check_at: Time.utc - 2.minutes
+    )
 
-    RoomMaintenanceJob.new.perform
+    RoomMaintenanceJob.new(room.id.value).perform
 
     Room.where(id: room.id.value).first?.should be_nil
     RoomPlayer.where(room_id: room.id.value).count.should eq(0)
+    Room.where(id: other_room.id.value).first?.should_not be_nil
   end
 
   it "starts a game for ready rooms and updates room game metadata" do
@@ -112,7 +139,7 @@ describe "background jobs" do
       last_connection_check_at: Time.utc
     )
 
-    RoomMaintenanceJob.new.perform
+    RoomMaintenanceJob.new(room.id.value).perform
 
     updated_room = Room.find(room.id)
     updated_room.game_id.should_not be_nil
@@ -134,7 +161,7 @@ describe "background jobs" do
     mark_ready(game_player_1)
     mark_ready(game_player_2)
 
-    GameProcessingJob.new.perform
+    GameProcessingJob.new(game.id.value).perform
 
     updated_game = Game.find(game.id)
     updated_game.started_at.should_not be_nil
@@ -146,7 +173,7 @@ describe "background jobs" do
     GamePlayer.create(game_id: game.id, user_id: create_user("timeout-game-1").id)
     GamePlayer.create(game_id: game.id, user_id: create_user("timeout-game-2").id)
 
-    GameProcessingJob.new.perform
+    GameProcessingJob.new(game.id.value).perform
 
     updated_game = Game.find(game.id)
     updated_game.started_at.should_not be_nil
@@ -175,7 +202,7 @@ describe "background jobs" do
     room.update(game_id: game.id, last_game_started_at: Time.utc)
     existing_entry = LeaderboardEntry.create(user_id: winning_game_player.user_id.value, games_won: 2_i64)
 
-    GameProcessingJob.new.perform
+    GameProcessingJob.new(game.id.value).perform
 
     updated_game = Game.find(game.id)
     updated_game.processing_completed.value.should be_true

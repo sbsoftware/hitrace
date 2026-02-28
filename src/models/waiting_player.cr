@@ -25,6 +25,7 @@ class WaitingPlayer < ApplicationRecord
       end
 
       model.update(last_connection_check_at: Time.utc)
+      BackgroundJobs.enqueue_waitlist_cleanup(model.id.value, delay: 11.seconds)
     rescue e : Exception
       ctx.response.status_code = 303
       ctx.response.headers["Location"] = HomePage.uri_path

@@ -14,8 +14,9 @@ class WaitResource < ApplicationResource
     user = ctx.session.ensure_user
 
     unless user.waiting_player
-      WaitingPlayer.create(user_id: user.id)
-      MatchmakingJob.enqueue
+      waiting_player = WaitingPlayer.create(user_id: user.id)
+      BackgroundJobs.enqueue_matchmaking(waiting_player.id.value)
+      BackgroundJobs.enqueue_waitlist_cleanup(waiting_player.id.value, delay: WaitlistCleanupJob::STALE_WAITING_PLAYER_AGE)
     end
 
     redirect WaitResource.uri_path
