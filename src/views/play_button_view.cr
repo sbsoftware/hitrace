@@ -1,9 +1,9 @@
 require "./game_button"
 
 class PlayButtonView
-  ToHtml.class_template do
-    form action: WaitResource.uri_path, method: "POST" do
-      GameButton.to_html { "Play Now" }
-    end
+  include Crumble::ContextView
+
+  ToHtml.instance_template do
+    CreateWaitingPlayerAction.new(ctx).action_template
   end
 end
