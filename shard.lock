@@ -18,7 +18,7 @@ shards:
 
   crumble-stimulus:
     git: https://github.com/sbsoftware/crumble-stimulus.git
-    version: 0.4.0
+    version: 0.4.3
 
   crumble-turbo:
     git: https://github.com/sbsoftware/crumble-turbo.git
@@ -42,7 +42,7 @@ shards:
 
   js:
     git: https://github.com/sbsoftware/js.cr.git
-    version: 1.7.0
+    version: 1.8.0
 
   nbchannel:
     git: https://github.com/wyhaines/nbchannel.cr.git
