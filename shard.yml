@@ -16,6 +16,9 @@ dependencies:
   crumble:
     github: sbsoftware/crumble
     version: "~> 0.30.0"
+  crumble-jobs:
+    github: sbsoftware/crumble-jobs
+    version: "~> 0.1.0"
   crumble-turbo:
     github: sbsoftware/crumble-turbo
     version: "~> 0.18.0"
