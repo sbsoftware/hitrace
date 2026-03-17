@@ -70,7 +70,7 @@ class GameSummaryView
   end
 
   ToHtml.inline_template :play_again_button do
-    form action: WaitResource.uri_path, method: "POST" do
+    form action: CreateWaitingPlayerAction.uri_path, method: "POST" do
       GameButton.to_html { "Play again" }
     end
   end

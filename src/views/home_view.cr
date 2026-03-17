@@ -77,7 +77,7 @@ class HomeView
           span GameHint do
             "Hit the target tiles faster than your opponent!"
           end
-          PlayButtonView
+          PlayButtonView.new(ctx: ctx)
           span CreateRoomButtonWrapper do
             CreateRoomAction.new(ctx).action_template
           end
