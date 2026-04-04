@@ -26,6 +26,7 @@ class RoomPlayer < ApplicationRecord
 
       model.last_connection_check_at = Time.utc
       model.save
+      BackgroundJobs.enqueue_room_maintenance(model.room_id.value, delay: 60.seconds)
 
       if game_id = model.room.game_id
         ctx.response.status_code = 303

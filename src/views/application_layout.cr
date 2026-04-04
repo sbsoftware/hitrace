@@ -135,7 +135,7 @@ class ApplicationLayout < ToHtml::Layout
   ToHtml.instance_template do
     super do
       div TopMenu do
-        a href: "https://discord.gg/2cbStUzb", target: "_blank" do
+        a href: "https://discord.gg/6GuTjxfskt", target: "_blank" do
           "Join our Discord"
         end
       end
