@@ -51,8 +51,8 @@ describe "background jobs" do
     queue = Crumble::Jobs::InMemoryQueue.new(10_000)
     Crumble::Jobs.set_queue(queue)
     io = IO::Memory.new
-    request_ctx = Crumble::Server::TestRequestContext.new(io, method: "POST", resource: WaitResource.uri_path)
-    WaitResource.handle(request_ctx).should be_true
+    request_ctx = Crumble::Server::TestRequestContext.new(io, method: "POST", resource: CreateWaitingPlayerAction.uri_path)
+    CreateWaitingPlayerAction.handle(request_ctx).should be_true
 
     WaitingPlayer.all.count.should eq(1)
     queue.reserve(1.millisecond).should be_nil
