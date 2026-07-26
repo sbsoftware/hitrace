@@ -119,6 +119,8 @@ class PrivacyNoticePage < ApplicationPage
         p do
           ENV.fetch("LEGAL_NOTICE_NAME")
           br
+          ENV.fetch("LEGAL_NOTICE_NAME2")
+          br
           ENV.fetch("LEGAL_NOTICE_STREET")
           br
           ENV.fetch("LEGAL_NOTICE_CITY")
