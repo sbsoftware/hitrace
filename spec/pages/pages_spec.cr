@@ -3,6 +3,7 @@ require "../spec_helper"
 describe "Crumble::Page integration" do
   before_all do
     ENV["LEGAL_NOTICE_NAME"] = "Test Name"
+    ENV["LEGAL_NOTICE_NAME2"] = "Test Name 2"
     ENV["LEGAL_NOTICE_STREET"] = "Test Street 1"
     ENV["LEGAL_NOTICE_CITY"] = "Test City"
     ENV["LEGAL_NOTICE_PHONE"] = "0000"
@@ -27,6 +28,7 @@ describe "Crumble::Page integration" do
     request_ctx.response.close
     request_ctx.response.status_code.should eq(200)
     io.to_s.should contain("Datenschutzerklärung")
+    io.to_s.should contain("Test Name 2")
   end
 
   it "renders LegalNoticePage at /legal_notice and includes font license links" do
@@ -37,6 +39,7 @@ describe "Crumble::Page integration" do
     request_ctx.response.close
     request_ctx.response.status_code.should eq(200)
     io.to_s.should contain("Impressum")
+    io.to_s.should contain("Test Name 2")
 
     FONT_ASSETS.each do |font_asset|
       io.to_s.should contain(%(href="#{font_asset.license.uri_path}"))
